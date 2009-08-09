@@ -1,12 +1,31 @@
 class UsersController < ApplicationController
   
-  # Protect these actions behind an admin login
-  # before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
-  before_filter :find_user, :only => [:suspend, :unsuspend, :destroy, :purge]
+  before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
   
-
-  # render new.rhtml
+  before_filter :find_user, :only => [:edit, :update, :suspend, :unsuspend, :destroy, :purge]
+  
   def new
+    @user = User.new
+  end
+
+  def edit
+  end
+
+  def update
+    if @user.update_attributes(params[:user])
+      if(@user.save)
+        #if(!@user.active?)
+        #  update_openid_user(@user, params)
+        #  return
+        #else
+          flash[:notice] = "Your account has been saved"
+          redirect_back_or_default root_path
+          return
+        #end
+      end
+    end
+    # flash[:error] = "There was a problem updating your account"
+    render :action => 'edit', :id => @user
   end
 
   def create
@@ -32,7 +51,7 @@ class UsersController < ApplicationController
       current_user.activate!
       flash[:notice] = "Signup complete!"
     end
-    redirect_back_or_default('/')
+    redirect_back_or_default(root_path)
   end
 
   def suspend
@@ -55,7 +74,8 @@ class UsersController < ApplicationController
     redirect_to users_path
   end
 
-protected
+  protected
+  
   def find_user
     @user = User.find(params[:id])
   end

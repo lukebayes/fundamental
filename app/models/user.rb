@@ -60,6 +60,13 @@ class User < ActiveRecord::Base
   def label
   end
 
+  def name
+  end
+
+  def using_openid?
+    false
+  end
+
   # Encrypts the password with the user salt
   def encrypt(password)
     self.class.encrypt(password, salt)

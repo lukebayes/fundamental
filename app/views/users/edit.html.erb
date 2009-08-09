@@ -1,10 +1,9 @@
 <% @user.password = @user.password_confirmation = nil %>
 <%= title "Create Account" %>
-<p class="sub-head"><strong>Create an account</strong> using one of the following:</p>
+<p class="sub-head"><strong>Update</strong> your account:</p>
 
 <% form_for @user do |f| %>
     <%= f.error_messages %>
-    <%= render :partial => 'shared/openid', :locals => {:label => 'Create'} %>
     <fieldset>
         <legend><%= APP_CONFIG[:site_name] %></legend>
         <ul>
@@ -20,6 +19,7 @@
                 <%= f.label 'email', 'Email' %>
                 <%= f.text_field 'email' %>
             </li>
+            <% if !@user.using_openid? -%>
             <li>
                 <%= f.label 'password', 'Password' %>
                 <%= f.password_field 'password' %>
@@ -28,8 +28,9 @@
                 <%= f.label 'password_confirmation', 'Confirm Password' %>
                 <%= f.password_field 'password_confirmation' %>
             </li>
+            <% end -%>
             <li class="buttons">
-                <%= submit_tag 'Create' %>
+                <%= submit_tag 'Update' %>
             </li>
         </ul>
     </fieldset>
