@@ -160,7 +160,8 @@ div#errorExplanation ul li {
 }
 
 /* === FORMS === */
-div.fieldWithErrors {
+span.fieldWithErrors > input {
+    border: 3px solid #ff0000;
 }
 
 div.fieldWithErrors label {
