@@ -13,6 +13,16 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_label_should_provide_login_on_missing_name
+    user = create_user(:name => nil)
+    assert_equal 'quire', user.label
+  end
+
+  def test_label_should_provide_name_if_possible
+    user = create_user
+    assert_equal 'Quire McMan', user.label
+  end
+
   def test_should_initialize_activation_code_upon_creation
     user = create_user
     user.reload
@@ -157,7 +167,7 @@ class UserTest < ActiveSupport::TestCase
 
 protected
   def create_user(options = {})
-    record = User.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    record = User.new({ :login => 'quire', :name => 'Quire McMan', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
     record.register! if record.valid?
     record
   end

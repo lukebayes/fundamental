@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20090809084126) do
+ActiveRecord::Schema.define(:version => 20090809202909) do
 
   create_table "users", :force => true do |t|
     t.string   "login"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20090809084126) do
     t.datetime "activated_at"
     t.string   "state",                                   :default => "passive"
     t.datetime "deleted_at"
+    t.string   "name"
   end
 
 end
