@@ -19,7 +19,7 @@ class UsersController < ApplicationController
         #  return
         #else
           flash[:notice] = "Your account has been saved"
-          redirect_back_or_default root_path
+          redirect_back_or_default
           return
         #end
       end
@@ -38,7 +38,7 @@ class UsersController < ApplicationController
     @user.register! if @user.valid?
     if @user.errors.empty?
       self.current_user = @user
-      redirect_back_or_default('/')
+      redirect_back_or_default
       flash[:notice] = "Thanks for signing up!"
     else
       render :action => 'new'
@@ -51,7 +51,7 @@ class UsersController < ApplicationController
       current_user.activate!
       flash[:notice] = "Signup complete!"
     end
-    redirect_back_or_default(root_path)
+    redirect_back_or_default
   end
 
   def suspend

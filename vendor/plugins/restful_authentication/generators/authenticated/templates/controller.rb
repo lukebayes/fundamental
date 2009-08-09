@@ -14,7 +14,7 @@ class <%= controller_class_name %>Controller < ApplicationController
         current_<%= file_name %>.remember_me unless current_<%= file_name %>.remember_token?
         cookies[:auth_token] = { :value => self.current_<%= file_name %>.remember_token , :expires => self.current_<%= file_name %>.remember_token_expires_at }
       end
-      redirect_back_or_default('/')
+      redirect_back_or_default
       flash[:notice] = "Logged in successfully"
     else
       render :action => 'new'
@@ -26,6 +26,6 @@ class <%= controller_class_name %>Controller < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
-    redirect_back_or_default('/')
+    redirect_back_or_default
   end
 end
