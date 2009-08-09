@@ -1,0 +1,13 @@
+# Set up openid provider URLS:
+OPEN_ID_AOL          = "http://aol.com"
+OPEN_ID_BLOGGER      = "http://blogger.com"
+OPEN_ID_FACEBOOK     = "https://facebook.com"
+OPEN_ID_FLICKR       = "http://flickr.com"
+OPEN_ID_GOOGLE       = "http://www.google.com/accounts/o8/id"
+OPEN_ID_LIVE_JOURNAL = "http://livejournal.com"
+OPEN_ID_MICROSOFT    = "http://live.com"
+OPEN_ID_MYSPACE      = "http://myspace.com"
+OPEN_ID_MY_OPEN_ID   = "http://myopenid.com"
+OPEN_ID_TWITTER      = "http://twitter.com"
+OPEN_ID_WORDPRESS    = "http://wordpress.com"
+OPEN_ID_YAHOO        = "http://yahoo.com"

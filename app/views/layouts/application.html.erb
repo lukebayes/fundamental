@@ -20,12 +20,12 @@
                 </span>
                 <span>
                     <% if logged_in? %>
-                    <strong>Welcome <%= current_user.label %></strong><br />
-                    <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;
-                    <%= link_to 'Sign out', session_path(:method => :destroy) %>
+                        <strong>Welcome <%= current_user.label %></strong><br />
+                        <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;
+                        <%= link_to 'Sign out', logout_path %>
                     <% else %>
-                    <%= link_to 'Sign in', new_session_path %> or 
-                    <%= link_to 'Create an account', new_user_path%>
+                        <%= link_to 'Sign in', new_session_path %> or
+                        <%= link_to 'Create an account', new_user_path%>
                     <% end %>
                 </span>
             </div>
