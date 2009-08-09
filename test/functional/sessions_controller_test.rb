@@ -4,9 +4,9 @@ require 'sessions_controller'
 # Re-raise errors caught by the controller.
 class SessionsController; def rescue_action(e) raise e end; end
 
-class SessionsControllerTest < Test::Unit::TestCase
+class SessionsControllerTest < ActionController::TestCase
 
-  #fixtures :users
+  fixtures :users
 
   def setup
     @controller = SessionsController.new
@@ -45,8 +45,8 @@ class SessionsControllerTest < Test::Unit::TestCase
   
   def test_should_delete_token_on_logout
     login_as :quentin
-    get :destroy
-    assert_equal @response.cookies["auth_token"], []
+    delete :destroy
+    assert_equal nil, @response.cookies["auth_token"]
   end
 
   def test_should_login_with_cookie
