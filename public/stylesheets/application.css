@@ -1,0 +1,230 @@
+/*
+red: #B30001
+eggshell: #e3e1db
+white: #e3e1db
+slate: #2d3034
+light blue: #8fc0bb
+deep blue: #2d308f
+taupe: #9a8e72
+*/
+
+html {
+    font-size:62.5%;  /* set 1em to 10px */
+    background-color: #e3e1db;
+}
+
+body {
+    font: 1.6em Verdana, Arial, sans-serif;
+    text-align: center;
+    color: #333333;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+
+#body-content > div {
+    margin: 1em auto;
+    width: 780px;
+    padding: 1em;
+}
+
+#body-content > #main {
+    background-color: #fff;
+}
+
+#body-content > #header {
+    text-align: right;
+}
+
+#body-content > #main {
+    text-align: left;
+}
+
+#header > .left {
+    float: left;
+}
+
+div#footer {
+    font-size: 80%;
+    text-align: center;
+    background-color: #e3e1db;
+    padding: 0px;
+}
+
+#footer > ul {
+    display: inline;
+    margin: 0px auto;
+}
+
+#footer > ul > li {
+    display: inline;
+}
+
+form {
+    margin-top: 1em;
+    width: 28em;
+}
+
+form ul, form li {
+    list-style-type: none;
+}
+
+form li {
+    text-align: right;
+    margin-top: .3em;
+}
+
+form li.checkbox label, form li.checkbox input {
+    cursor: pointer;
+}
+
+form li.buttons {
+    margin-top: 1.5em;
+    font-size: 95%;
+}
+
+fieldset {
+    border: .3em #ccc solid;
+}
+
+legend {
+    margin: 0px 1em;
+    padding: 0px .5em;
+}
+
+h2 {
+    color: #2d3034;
+    margin-top: 0px;
+    margin-bottom: 0.5em;
+}
+
+p.sub-head {
+    font-size: 110%;
+}
+
+a {
+    color: #2d308f;
+}
+
+a:hover {
+    color: #B30001;
+}
+
+a:visited {
+    color: #65308f;
+}
+
+/* === FLASH MESSAGES === */
+div.flash {
+    width: 26.2em;
+    border: 5px #ccc solid;
+    padding: .5em;
+    margin-bottom: .6em;
+}
+
+div#flash-notice {
+    border-color: #00ff00;
+}
+
+div#flash-warning {
+    border-color: #ffcc00;
+}
+
+div#flash-error {
+    border-color:#ff0000;
+}
+
+/* === ERROR MESSAGES === */
+div#errorExplanation {
+    border: 5px #ff0000 solid;
+    padding: .5em;
+    margin-bottom: .6em;
+}
+
+div#errorExplanation h2 {
+    
+}
+
+div#errorExplanation p {
+    
+}
+
+div#errorExplanation ul {
+    
+}
+
+div#errorExplanation ul li {
+    
+}
+
+/* === FORMS === */
+div.fieldWithErrors {
+}
+
+div.fieldWithErrors label {
+}
+
+div.fieldWithErrors input, div.fieldWithErrors select, 
+div.fieldWithErrors textarea
+{
+}
+
+#openid-providers li {
+    float: left;
+    margin-left: .8em;
+    margin-right: .8em;
+    margin-bottom: .6em;
+    width: 150px;
+    height: 50px;
+}
+
+#toggle-any-open-id {
+    font-size: 85%;
+    float: right;
+    margin: 1em 1em;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+#any-open-id {
+    width: 100%;
+    float: left;
+    text-align: right;
+    padding-bottom: 1em;
+}
+
+#any-open-id > div {
+    padding: 1em 1em 0em 0em;
+}
+
+#any-open-id > hr {
+    margin: 0px;
+    height: 5px;
+    color: #ccc;
+    background-color: #ccc;
+    border: 0px solid #ccc;
+}
+
+#openid-providers input {
+    background-image: url('/images/openid/button.png');
+    width: 150px;
+    height: 50px;
+}
+
+#openid-providers input:hover {
+    background-image: url('/images/openid/button-hover.png');
+}
+
+#openid-options a {
+    cursor: pointer;
+}
+
+.smaller {
+    font-size: 90%;
+}
+
+.password-reminder {
+    margin-right: 0.7em;
+}

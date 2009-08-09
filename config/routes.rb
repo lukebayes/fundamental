@@ -4,6 +4,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
 
+  map.root :controller => 'site', :action => 'index'
+
+  map.about '/about', :controller => 'site', :action => 'about'
+  map.contact '/contact', :controller => 'site', :action => 'contact'
+  map.privacy '/privacy', :controller => 'site', :action => 'privacy'
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
