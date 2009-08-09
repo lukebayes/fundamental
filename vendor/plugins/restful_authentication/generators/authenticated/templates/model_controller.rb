@@ -34,7 +34,7 @@ class <%= model_controller_class_name %>Controller < ApplicationController
       current_<%= file_name %>.activate<% if options[:stateful] %>!<% end %>
       flash[:notice] = "Signup complete!"
     end
-    redirect_back_or_default('/')
+    redirect_back_or_default
   end
 <% end %><% if options[:stateful] %>
   def suspend

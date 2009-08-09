@@ -3,7 +3,8 @@ require 'performance_test_help'
 
 # Profiling results for each test method are written to tmp/performance.
 class BrowsingTest < ActionController::PerformanceTest
+
   def test_homepage
-    get '/'
+    get root_path
   end
 end
