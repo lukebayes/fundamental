@@ -16,8 +16,9 @@ class UserMailerTest < Test::Unit::TestCase
     @expected.set_content_type "text", "plain", { "charset" => CHARSET }
   end
 
-  def test_dummy_test
-    #do nothing
+  # TODO: Add tests for the UserMailer features 
+  def test_nothing
+    assert true
   end
 
   private

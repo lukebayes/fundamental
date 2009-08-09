@@ -39,7 +39,7 @@ class UsersController < ApplicationController
     if @user.errors.empty?
       self.current_user = @user
       redirect_back_or_default
-      flash[:notice] = "Thanks for signing up!"
+      flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
     else
       render :action => 'new'
     end

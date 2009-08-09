@@ -17,12 +17,14 @@ class SessionsControllerTest < ActionController::TestCase
   def test_should_login_and_redirect
     post :create, :login => 'quentin', :password => 'test'
     assert session[:user_id]
+    assert_nil flash[:error]
     assert_response :redirect
   end
 
   def test_should_fail_login_and_not_redirect
     post :create, :login => 'quentin', :password => 'bad password'
     assert_nil session[:user_id]
+    assert_not_nil flash[:error]
     assert_response :success
   end
 

@@ -1,7 +1,6 @@
 # This controller handles the login/logout function of the site.  
 class SessionsController < ApplicationController
 
-  # render new.rhtml
   def new
   end
 
@@ -15,6 +14,8 @@ class SessionsController < ApplicationController
       redirect_back_or_default
       flash[:notice] = "Logged in successfully"
     else
+      flash[:warning] = "If you recently created this account, you may need to activate it by checking your email and clicking the activation link."
+      flash[:error] = "Authentication failed, please try again."
       render :action => 'new'
     end
   end
