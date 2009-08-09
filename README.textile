@@ -1,0 +1,16 @@
+h3. Introduction
+
+Fundamental is intended to be a basic, starter Rails application. The idea is heavily inspired by the "Bort":http://github.com/fudgestudios/bort project.
+
+The main features that this project hopes to support are as follows:
+ * RESTful user accounts with role based authorization
+ * Image upload, manipulation and retrieval
+ * Rich text user input
+ * Asynchronous message queue
+ * Full administrative tools
+
+Support for the following external services:
+ * Instant deployment to http://heroku.com
+ * Support for http://runcoderun.com continuous integration service
+ * Support Amazon Web Services wherever possible
+
