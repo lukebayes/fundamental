@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <title><%= @page_title || APP_CONFIG[:site_name] %></title>
+        <meta http-equiv="content-type" content="text/xhtml; charset=utf-8" />
+        <meta http-equiv="imagetoolbar" content="no" />
+        <meta name="distribution" content="all" />
+        <meta name="robots" content="all" />    
+        <meta name="resource-type" content="document" />
+        <meta name="MSSmartTagsPreventParsing" content="true" />
+        <%= stylesheet_link_tag ['yui-reset-min', 'yui-base-min', 'application'] %>
+        <%= javascript_include_tag ['jquery-1.3.2.min', 'application'] %>
+    </head>
+    <body>
+        <div id="body-content">
+            <div id="header">
+                <span class="left">
+                    <%= link_to 'Main', root_path %>
+                </span>
+                <span>
+                    <% if logged_in? %>
+                    <strong>Welcome <%= current_user.label %></strong><br />
+                    <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;
+                    <%= link_to 'Sign out', session_path(:method => :destroy) %>
+                    <% else %>
+                    <%= link_to 'Sign in', new_session_path %> or 
+                    <%= link_to 'Create an account', new_user_path%>
+                    <% end %>
+                </span>
+            </div>
+            <div id="main">
+                <%= flash_messages %>
+                <%= yield :layout %>
+            </div>
+            <div id="footer">
+              <ul>
+                <li><%= link_to 'About', about_path %></li>
+                <li><%= link_to 'Contact', contact_path %></li>
+                <li><%= link_to 'Privacy', privacy_path %></li>
+              </ul>
+              <br />
+              <br />
+              <ul>
+                <li><a href="http://github.com/lukebayes/fundamental" target="_blank">GitHub</a></li>
+                <li><a href="http://fundamental.heroku.com" target="_blank">Heroku</a></li>
+                <li><a href="http://runcoderun.com/lukebayes/fundamental" target="_blank">Run Code Run</a></li>
+                <li><a href="http://www.pivotaltracker.com/projects/24964" target="_blank">Pivotal Tracker</a></li>
+              </ul>
+            </div>
+        </div>
+    </body>
+</html>

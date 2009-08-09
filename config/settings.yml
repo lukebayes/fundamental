@@ -1,0 +1,17 @@
+development: &non_production_settings
+  site_url: http://localhost:3000
+  site_name: Fundamental
+  admin_email: lbayes@patternpark.com
+
+test:
+  <<: *non_production_settings
+
+staging:
+  site_url: http://fundamental.heroku.com
+  site_name: Fundamental
+  admin_email: lbayes@patternpark.com
+
+production:
+  site_url: http://www.fundamental.com
+  site_name: Fundamental
+  admin_email: lbayes@patternpark.com
