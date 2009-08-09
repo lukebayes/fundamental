@@ -32,6 +32,14 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
+  def test_should_require_email_on_signup
+    assert_no_difference 'User.count' do
+      create_user(:email => nil)
+      assert assigns(:user).errors.on(:email)
+      assert_response :success
+    end
+  end
+
   def test_should_require_password_on_signup
     assert_no_difference 'User.count' do
       create_user(:password => nil)
@@ -48,14 +56,6 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
-  def test_should_require_email_on_signup
-    assert_no_difference 'User.count' do
-      create_user(:email => nil)
-      assert assigns(:user).errors.on(:email)
-      assert_response :success
-    end
-  end
-  
   def test_should_sign_up_user_in_pending_state
     create_user
     assigns(:user).reload
