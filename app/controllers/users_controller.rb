@@ -34,12 +34,13 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
+
     @user = User.new(params[:user])
     @user.register! if @user.valid?
     if @user.errors.empty?
+      flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
       self.current_user = @user
       redirect_back_or_default
-      flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
     else
       render :action => 'new'
     end
