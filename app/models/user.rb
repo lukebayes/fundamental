@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
 
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :name, :password, :password_confirmation
+  attr_accessible :login, :email, :name, :password, :password_confirmation, :identity_url
 
   acts_as_state_machine :initial => :pending
   state :passive
@@ -136,7 +136,11 @@ class User < ActiveRecord::Base
   end
 
   def password_required?
-    crypted_password.blank? || !password.blank?
+    !using_open_id? && (crypted_password.blank? || !password.blank?)
+  end
+
+  def using_open_id?
+    !identity_url.blank?
   end
 
   def make_activation_code

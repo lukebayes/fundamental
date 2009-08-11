@@ -169,6 +169,12 @@ class UserTest < ActiveSupport::TestCase
     assert users(:quentin).deleted?
   end
 
+  def test_validation_with_identity_url
+    assert_difference('User.count') do
+      create_user({:identity_url => 'http://example.com', :password => nil, :password_confirmation => nil}).save!
+    end
+  end
+
 protected
   def create_user(options = {})
     record = User.new({ :login => 'quire', :name => 'Quire McMan', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
