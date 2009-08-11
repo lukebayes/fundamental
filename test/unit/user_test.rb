@@ -171,7 +171,9 @@ class UserTest < ActiveSupport::TestCase
 
   def test_validation_with_identity_url
     assert_difference('User.count') do
-      create_user({:identity_url => 'http://example.com', :password => nil, :password_confirmation => nil}).save!
+      user = create_user({:identity_url => 'http://example.com', :password => nil, :password_confirmation => nil})
+      user.save!
+      assert user.pending?
     end
   end
 
