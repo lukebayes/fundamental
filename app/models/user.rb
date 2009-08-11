@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20090809084126
+# Schema version: 20090810050607
 #
 # Table name: users
 #
@@ -16,6 +16,8 @@
 #  activated_at              :datetime
 #  state                     :string(255)     default("passive")
 #  deleted_at                :datetime
+#  name                      :string(255)
+#  identity_url              :string(255)
 #
 
 require 'digest/sha1'
@@ -31,8 +33,9 @@ class User < ActiveRecord::Base
   validates_length_of       :login,    :within => 3..40
   validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :email, :case_sensitive => false
+
   before_save :encrypt_password
-  
+
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation
@@ -125,29 +128,30 @@ class User < ActiveRecord::Base
   end
 
   protected
-    # before filter 
-    def encrypt_password
-      return if password.blank?
-      self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
-      self.crypted_password = encrypt(password)
-    end
-      
-    def password_required?
-      crypted_password.blank? || !password.blank?
-    end
-    
-    def make_activation_code
-      self.deleted_at = nil
-      self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-    end
-    
-    def do_delete
-      self.deleted_at = Time.now.utc
-    end
+  
+  def encrypt_password
+    return if password.blank?
+    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{login}--") if new_record?
+    self.crypted_password = encrypt(password)
+  end
 
-    def do_activate
-      @activated = true
-      self.activated_at = Time.now.utc
-      self.deleted_at = self.activation_code = nil
-    end
+  def password_required?
+    crypted_password.blank? || !password.blank?
+  end
+
+  def make_activation_code
+    self.deleted_at = nil
+    self.activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+  end
+
+  def do_delete
+    self.deleted_at = Time.now.utc
+  end
+
+  def do_activate
+    @activated = true
+    self.activated_at = Time.now.utc
+    self.deleted_at = self.activation_code = nil
+  end
+
 end
