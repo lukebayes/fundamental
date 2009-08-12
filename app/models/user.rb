@@ -38,6 +38,8 @@ class User < ActiveRecord::Base
   validates_length_of       :email, :within => 3..254,   :unless => :creating_with_open_id?
   validates_uniqueness_of   :email, :case_sensitive => false, :unless => :creating_with_open_id?
 
+  validates_uniqueness_of   :identity_url, :if => :using_open_id?
+  
   before_save :encrypt_password
 
   # prevents a user from submitting a crafted form that bypasses activation
@@ -131,6 +133,10 @@ class User < ActiveRecord::Base
     @activated
   end
 
+  def using_open_id?
+    !identity_url.blank?
+  end
+
   protected
 
   def encrypt_password
@@ -143,16 +149,8 @@ class User < ActiveRecord::Base
     !using_open_id? && (crypted_password.blank? || !password.blank?)
   end
 
-  def login_required?
-    !using_open_id?
-  end
-
   def creating_with_open_id?
     using_open_id? && new_record?
-  end
-
-  def using_open_id?
-    !identity_url.blank?
   end
 
   def make_activation_code

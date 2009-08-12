@@ -58,7 +58,7 @@ class UsersControllerTest < ActionController::TestCase
 
   def test_should_use_open_id_for_signup
     assert_difference 'User.count' do
-      post :create, :openid_url => 'http://www.google.com/accounts/o8/id'
+      post :create, :identity_url => 'http://www.google.com/accounts/o8/id'
     end
   end
 

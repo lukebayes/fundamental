@@ -177,6 +177,13 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_using_open_id
+    user = create_user
+    assert !user.using_open_id?
+    user.identity_url = 'http://example.com'
+    assert user.using_open_id?
+  end
+
   def test_validation_with_identity_url_on_second_save
     user = User.new :identity_url => 'http://example.com'
     assert user.save!

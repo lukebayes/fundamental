@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  include UsersHelper
   
   before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
   before_filter :find_user, :only => [:edit, :update, :suspend, :unsuspend, :destroy, :purge]
@@ -33,15 +34,19 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
+    if !using_open_id?
+      @user = create_user(params[:user])
+      @user.register!
 
-    @user = User.new(params[:user])
-    @user.register! if @user.valid?
-    if @user.errors.empty?
-      flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
-      self.current_user = @user
-      redirect_back_or_default
+      if @user.errors.empty?
+        flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
+        self.current_user = @user
+        redirect_back_or_default
+      else
+        render :action => 'new'
+      end
     else
-      render :action => 'new'
+      create_open_id_user(params[:openid_url])
     end
   end
 
@@ -75,9 +80,53 @@ class UsersController < ApplicationController
   end
 
   protected
+
+  def using_open_id?
+    puts "using open id? #{!params[:openid_url].blank?}"
+    !params[:openid_url].blank?
+  end
   
   def find_user
     @user = User.find(params[:id])
   end
 
+  def create_user(attributes)
+    User.new(attributes)    
+  end
+
+  def create_open_id_user(identity_url)
+    identity_url = OpenIdAuthentication.normalize_url identity_url
+
+    authenticate_with_open_id(identity_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
+      if result.successful?
+        finish_creating_open_id_user get_options_from_open_id_params(params, identity_url)
+      else
+        @user = User.new
+        failed_creation(@user, result.message || "There was a problem with the OpenID service.")
+      end
+    end
+  end
+
+  def open_id_user_exists?(user)
+    !User.find_by_identity_url(user.identity_url).nil?
+  end
+
+  def finish_creating_open_id_user(attributes)
+    user = User.new(attributes)
+    if(open_id_user_exists?(user))
+      flash[:error] = "We already have an account for that user, please try Signing in."
+      redirect_to new_session_path
+      return
+    end
+    user.update_attributes!(attributes)
+    self.current_user = user
+    flash[:notice] = "You are now signed in, let's finish creating your account."
+    return redirect_to(:controller => 'users', :action => 'edit', :id => user)
+  end
+
+  def failed_creation(user = nil, message = 'Sorry, there was an error creating your account')
+    flash[:error] = message
+    @user = user || User.new
+    render :action => 'new'
+  end
 end
