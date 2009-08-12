@@ -171,10 +171,20 @@ class UserTest < ActiveSupport::TestCase
 
   def test_validation_with_identity_url
     assert_difference('User.count') do
-      user = create_user({:identity_url => 'http://example.com', :password => nil, :password_confirmation => nil})
-      user.save!
+      user = User.new :identity_url => 'http://example.com'
+      assert user.save!
       assert user.pending?
     end
+  end
+
+  def test_validation_with_identity_url_on_second_save
+    user = User.new :identity_url => 'http://example.com'
+    assert user.save!
+
+    assert !user.valid?, 'Second attempts to save should fail with validation errors on login and email.'
+    user.email = 'abc@example.com'
+    user.login = 'abcdefg'
+    assert user.save!
   end
 
 protected

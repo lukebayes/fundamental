@@ -17,7 +17,7 @@ class UsersController < ApplicationController
         #  update_openid_user(@user, params)
         #  return
         #else
-          flash[:notice] = "Your account has been saved"
+          flash[:notice] = "Your account is now updated."
           redirect_back_or_default
           return
         #end
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
     self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
     if logged_in? && !current_user.active?
       current_user.activate!
-      flash[:notice] = "Signup complete!"
+      flash[:notice] = "Sign up is complete!"
     end
     redirect_back_or_default
   end
