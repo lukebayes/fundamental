@@ -16,4 +16,12 @@ module UsersHelper
   def open_id_required_fields
     ['http://axschema.org/contact/email', 'email', 'nickname', 'fullname']
   end
+
+  # Convert a string to a potentially valid login:
+  def name_to_login(name)
+    return nil if name.nil? || name == ''
+    name = name.gsub(' ', '')
+    name = name.downcase
+    return name
+  end
 end

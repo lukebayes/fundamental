@@ -93,7 +93,7 @@ class UsersController < ApplicationController
   end
 
   def create_open_id_user(identity_url)
-    identity_url = OpenIdAuthentication.normalize_url identity_url
+    identity_url = OpenIdAuthentication.normalize_identifier identity_url
 
     authenticate_with_open_id(identity_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
       if result.successful?
@@ -110,16 +110,16 @@ class UsersController < ApplicationController
   end
 
   def finish_creating_open_id_user(attributes)
-    user = User.new(attributes)
-    if(open_id_user_exists?(user))
+    @user = User.new(attributes)
+    if(open_id_user_exists?(@user))
       flash[:error] = "We already have an account for that user, please try Signing in."
       redirect_to new_session_path
       return
     end
-    user.update_attributes!(attributes)
-    self.current_user = user
+    @user.update_attributes!(attributes)
+    self.current_user = @user
     flash[:notice] = "You are now signed in, let's finish creating your account."
-    return redirect_to(:controller => 'users', :action => 'edit', :id => user)
+    return redirect_to(:controller => 'users', :action => 'edit', :id => @user)
   end
 
   def failed_creation(user = nil, message = 'Sorry, there was an error creating your account')

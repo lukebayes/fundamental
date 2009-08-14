@@ -57,8 +57,12 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   def test_should_use_open_id_for_signup
+    identity_url = 'http://www.google.com/accounts/o8/id'
+    stub_open_id_creation identity_url
+
     assert_difference 'User.count' do
-      post :create, :identity_url => 'http://www.google.com/accounts/o8/id'
+      post :create, :openid_url => identity_url
+      assert_redirected_to edit_user_path( User.last )
     end
   end
 
@@ -97,8 +101,15 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   protected
-    def create_user(options = {})
-      post :create, :user => { :login => 'quire', :email => 'quire@example.com',
-        :password => 'quire', :password_confirmation => 'quire' }.merge(options)
-    end
+
+  def create_user(options = {})
+    post :create, :user => { :login => 'quire', :email => 'quire@example.com',
+      :password => 'quire', :password_confirmation => 'quire' }.merge(options)
+  end
+
+  def stub_open_id_creation(identity_url, successful=true)
+    result = {}
+    result.expects(:successful?).returns(successful).twice
+    UsersController.any_instance.expects(:authenticate_with_open_id).yields(result, identity_url)
+  end
 end
