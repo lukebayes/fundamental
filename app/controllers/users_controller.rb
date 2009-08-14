@@ -37,7 +37,6 @@ class UsersController < ApplicationController
     if !using_open_id?
       @user = create_user(params[:user])
       @user.register!
-
       if @user.errors.empty?
         flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
         self.current_user = @user
@@ -82,7 +81,6 @@ class UsersController < ApplicationController
   protected
 
   def using_open_id?
-    puts "using open id? #{!params[:openid_url].blank?}"
     !params[:openid_url].blank?
   end
   

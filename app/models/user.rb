@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   state :deleted, :enter => :do_delete
 
   event :register do
-    transitions :from => :passive, :to => :pending, :guard => Proc.new {|u| !(u.crypted_password.blank? && u.password.blank?) }
+    transitions :from => :passive, :to => :pending, :guard => Proc.new {|u| u.valid? && !(u.crypted_password.blank? && u.password.blank?) }
   end
   
   event :activate do
