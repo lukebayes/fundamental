@@ -37,4 +37,19 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def stub_open_id_creation(identity_url, successful=true)
+    result = {}
+    result.expects(:successful?).returns(successful).twice
+    UsersController.any_instance.expects(:authenticate_with_open_id).yields(result, identity_url)
+  end
+
+  def default_user(options = {})
+    {
+       :login => 'quire',
+       :email => 'quire@example.com',
+       :password => 'quire',
+       :password_confirmation => 'quire'
+    }.merge(options)
+  end
+
 end

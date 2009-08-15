@@ -35,6 +35,8 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
     if !using_open_id?
+      puts "================="
+      puts "NOT USING OPEN ID"
       @user = create_user(params[:user])
       @user.register!
       if @user.errors.empty?
@@ -45,7 +47,7 @@ class UsersController < ApplicationController
         render :action => 'new'
       end
     else
-      create_open_id_user(params[:openid_url])
+      create_open_id_user
     end
   end
 
@@ -80,9 +82,9 @@ class UsersController < ApplicationController
 
   protected
 
-  def using_open_id?
-    !params[:openid_url].blank?
-  end
+  #def using_open_id?
+  #  !params[:openid_url].blank?
+  #end
   
   def find_user
     @user = User.find(params[:id])
@@ -92,10 +94,8 @@ class UsersController < ApplicationController
     User.new(attributes)    
   end
 
-  def create_open_id_user(identity_url)
-    identity_url = OpenIdAuthentication.normalize_identifier identity_url
-
-    authenticate_with_open_id(identity_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
+  def create_open_id_user
+    authenticate_with_open_id(params[:identity_url], :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
       if result.successful?
         finish_creating_open_id_user get_options_from_open_id_params(params, identity_url)
       else
@@ -113,9 +113,11 @@ class UsersController < ApplicationController
     @user = User.new(attributes)
     if(open_id_user_exists?(@user))
       flash[:error] = "We already have an account for that user, please try Signing in."
+      # TODO: Just go ahead and log them in... 
       redirect_to new_session_path
       return
     end
+
     @user.update_attributes!(attributes)
     self.current_user = @user
     flash[:notice] = "You are now signed in, let's finish creating your account."

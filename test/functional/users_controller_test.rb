@@ -56,16 +56,6 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
-  def test_should_use_open_id_for_signup
-    identity_url = 'http://www.google.com/accounts/o8/id'
-    stub_open_id_creation identity_url
-
-    assert_difference 'User.count' do
-      post :create, :openid_url => identity_url
-      assert_redirected_to edit_user_path( User.last )
-    end
-  end
-
   def test_should_sign_up_user_in_pending_state
     create_user
     assigns(:user).reload
@@ -100,16 +90,36 @@ class UsersControllerTest < ActionController::TestCase
     # well played, sir
   end
 
+  def test_using_open_for_signup_should_work
+    identity_url = 'http://openid.example.com'
+    stub_open_id_creation identity_url
+
+    assert_difference 'User.count' do
+      assert_difference 'ActionMailer::Base.deliveries.size' do
+        post :create, :openid_url => identity_url
+        user = User.last
+        assert_redirected_to edit_user_path(user)
+      end
+    end
+  end
+
+  def test_should_fail_with_existing_open_id_for_signup
+    identity_url = 'http://openid.example.com'
+    existing = User.new(:identity_url => identity_url)
+    existing.save(false)
+
+    stub_open_id_creation identity_url
+    assert_no_difference 'User.count' do
+      assert_no_difference 'ActionMailer::Base.deliveries.size' do
+        post :create, :openid_url => identity_url
+        assert_redirected_to new_session_path
+      end
+    end
+  end
+
   protected
 
   def create_user(options = {})
-    post :create, :user => { :login => 'quire', :email => 'quire@example.com',
-      :password => 'quire', :password_confirmation => 'quire' }.merge(options)
-  end
-
-  def stub_open_id_creation(identity_url, successful=true)
-    result = {}
-    result.expects(:successful?).returns(successful).twice
-    UsersController.any_instance.expects(:authenticate_with_open_id).yields(result, identity_url)
+    post :create, :user => default_user(options)
   end
 end
