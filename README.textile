@@ -4,16 +4,15 @@ Fundamental is intended to be a basic, starter Rails application. The idea is he
 
 The main features that this project hopes to support are as follows:
  * RESTful user accounts with role based authorization
- * OpenID authentication
+ * OpenID user authentication
+ * Google apps (or GMail) SMTP Servers
  * Image upload, manipulation and retrieval
- * Rich text user input
- * Asynchronous message queue
- * Full administrative tools
+ * Full administrative tools, for provided features
 
 Support for the following external services:
- * Instant deployment to http://heroku.com
- * Support for http://runcoderun.com continuous integration service
- * Support Amazon Web Services wherever possible
+ * "Heroku":http://heroku.com for deployment
+ * "Run Code Run":http://runcoderun.com continuous integration service
+ * "Amazon Web Services":http://aws.amazon.com for image upload and asset host
 
 h3. Roadmap
 
