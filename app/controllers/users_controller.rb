@@ -35,8 +35,6 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
     if !using_open_id?
-      puts "================="
-      puts "NOT USING OPEN ID"
       @user = create_user(params[:user])
       @user.register!
       if @user.errors.empty?
@@ -113,7 +111,7 @@ class UsersController < ApplicationController
     @user = User.new(attributes)
     if(open_id_user_exists?(@user))
       flash[:error] = "We already have an account for that user, please try Signing in."
-      # TODO: Just go ahead and log them in... 
+      # TODO: Just go ahead and log them in...
       redirect_to new_session_path
       return
     end
@@ -121,7 +119,8 @@ class UsersController < ApplicationController
     @user.update_attributes!(attributes)
     self.current_user = @user
     flash[:notice] = "You are now signed in, let's finish creating your account."
-    return redirect_to(:controller => 'users', :action => 'edit', :id => @user)
+    @user.valid?
+    return redirect_to(edit_user_path(@user))
   end
 
   def failed_creation(user = nil, message = 'Sorry, there was an error creating your account')

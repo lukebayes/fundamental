@@ -90,6 +90,12 @@ class UsersControllerTest < ActionController::TestCase
     # well played, sir
   end
 
+  def test_should_send_email_on_signup
+    assert_difference 'ActionMailer::Base.deliveries.size' do
+      create_user
+    end
+  end
+
   def test_using_open_for_signup_should_work
     identity_url = 'http://openid.example.com'
     stub_open_id_creation identity_url
