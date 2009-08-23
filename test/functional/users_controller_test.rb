@@ -122,6 +122,6 @@ class UsersControllerTest < ActionController::TestCase
   protected
 
   def create_user(options = {})
-    post :create, :user => default_user(options)
+    post :create, :user => default_user_options(options)
   end
 end

@@ -6,7 +6,7 @@ class CreateUserTest < ActionController::IntegrationTest
   def test_should_send_activation_email_on_signup
     assert_difference 'User.count' do # User created
       assert_difference 'ActionMailer::Base.deliveries.size' do # Invitation Sent
-        post users_path, :user => default_user(:openid_url => 'http://www.example.com')
+        post users_path, :user => default_user_options(:openid_url => 'http://www.example.com')
       end
     end
     user = User.last
@@ -29,7 +29,7 @@ class CreateUserTest < ActionController::IntegrationTest
     end
 
     # Commit the edit with a valid email address
-    put user_path(user), :user => default_user(:email => 'abc@example.com', :password => nil, :password_confirmation => nil)
+    put user_path(user), :user => default_user_options(:email => 'abc@example.com', :password => nil, :password_confirmation => nil)
 
     user.reload 
     # Ensure the newly created user is valid

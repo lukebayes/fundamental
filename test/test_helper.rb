@@ -43,7 +43,7 @@ class ActiveSupport::TestCase
     UsersController.any_instance.expects(:authenticate_with_open_id).yields(result, identity_url)
   end
 
-  def default_user(options = {})
+  def default_user_options(options = {})
     {
        :login => 'quire',
        :email => 'quire@example.com',
