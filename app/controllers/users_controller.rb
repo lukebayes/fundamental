@@ -3,7 +3,8 @@ class UsersController < ApplicationController
   
   before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
   before_filter :find_user, :only => [:edit, :update, :suspend, :unsuspend, :destroy, :purge]
-  
+  before_filter :authorized?, :only => [:edit, :update]
+
   def new
     @user = User.new
   end
@@ -80,12 +81,12 @@ class UsersController < ApplicationController
 
   protected
 
-  #def using_open_id?
-  #  !params[:openid_url].blank?
-  #end
-  
   def find_user
     @user = User.find(params[:id])
+  end
+
+  def authorized?
+    (current_user == @user) || access_denied
   end
 
   def create_user(attributes)

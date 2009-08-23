@@ -19,15 +19,21 @@
                 <%= f.label 'email', 'Email' %>
                 <%= f.text_field 'email' %>
             </li>
-            <% if !@user.using_openid? -%>
-            <li>
-                <%= f.label 'password', 'Password' %>
-                <%= f.password_field 'password' %>
-            </li>
-            <li>
-                <%= f.label 'password_confirmation', 'Confirm Password' %>
-                <%= f.password_field 'password_confirmation' %>
-            </li>
+            Using open id: <%= @user.using_openid? %> ---- <%= @user.identity_url %>
+            <% if @user.using_openid? -%>
+                <li>
+                    <%= f.label 'identity_url', 'Identity URL' %>
+                    <%= f.password_field 'identity_url' %>
+                </li>
+            <% else -%>
+                <li>
+                    <%= f.label 'password', 'Password' %>
+                    <%= f.password_field 'password' %>
+                </li>
+                <li>
+                    <%= f.label 'password_confirmation', 'Confirm Password' %>
+                    <%= f.password_field 'password_confirmation' %>
+                </li>
             <% end -%>
             <li class="buttons">
                 <%= submit_tag 'Update' %>
