@@ -52,16 +52,10 @@ class UsersController < ApplicationController
 
   def activate
     self.current_user = params[:activation_code].blank? ? false : User.find_by_activation_code(params[:activation_code])
-
-    if(!logged_in?)
-      flash[:notice] = "Could not find a user for that activation code."
-    elsif current_user.active?
-      flash[:notice] = "It looks like you may have already activated this email address."
-    else
-      current_user.activate_email!
-      flash[:notice] = "Your email address has been activated"
+    if logged_in? && !current_user.active?
+      current_user.activate!
+      flash[:notice] = "Sign up is complete!"
     end
-
     redirect_back_or_default
   end
 
