@@ -19,8 +19,8 @@
                 <%= f.label 'email', 'Email' %>
                 <%= f.text_field 'email' %>
             </li>
-            Using open id: <%= @user.using_openid? %> ---- <%= @user.identity_url %>
-            <% if @user.using_openid? -%>
+            Using open id: <%= @user.using_open_id? %> ---- <%= @user.identity_url %>
+            <% if @user.using_open_id? -%>
                 <li>
                     <%= f.label 'identity_url', 'Identity URL' %>
                     <%= f.password_field 'identity_url' %>

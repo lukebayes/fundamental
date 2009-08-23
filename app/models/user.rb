@@ -46,32 +46,27 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :name, :password, :password_confirmation, :identity_url
 
-  acts_as_state_machine :initial => :pending
+  acts_as_state_machine :initial => :passive
+  
   state :passive
-  state :pending, :enter => :make_activation_code
   state :active,  :enter => :do_activate
   state :suspended
   state :deleted, :enter => :do_delete
 
   event :register do
-    transitions :from => :passive, :to => :pending, :guard => Proc.new {|u| u.valid? && !(u.crypted_password.blank? && u.password.blank?) }
-  end
-  
-  event :activate do
-    transitions :from => :pending, :to => :active 
+    transitions :from => :passive, :to => :active, :guard => Proc.new {|u| u.valid? && (!(u.crypted_password.blank? && u.password.blank?) || u.using_open_id?) }
   end
   
   event :suspend do
-    transitions :from => [:passive, :pending, :active], :to => :suspended
+    transitions :from => [:passive, :active], :to => :suspended
   end
   
   event :delete do
-    transitions :from => [:passive, :pending, :active, :suspended], :to => :deleted
+    transitions :from => [:passive, :active, :suspended], :to => :deleted
   end
-
+  
   event :unsuspend do
     transitions :from => :suspended, :to => :active,  :guard => Proc.new {|u| !u.activated_at.blank? }
-    transitions :from => :suspended, :to => :pending, :guard => Proc.new {|u| !u.activation_code.blank? }
     transitions :from => :suspended, :to => :passive
   end
 
@@ -88,10 +83,6 @@ class User < ActiveRecord::Base
 
   def label
     name || login
-  end
-
-  def using_openid?
-    false
   end
 
   # Encrypts the password with the user salt
@@ -160,6 +151,11 @@ class User < ActiveRecord::Base
 
   def do_delete
     self.deleted_at = Time.now.utc
+  end
+
+  def activate_email!
+    activate!
+    save!
   end
 
   def do_activate
