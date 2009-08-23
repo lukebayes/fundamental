@@ -59,7 +59,7 @@ class UsersControllerTest < ActionController::TestCase
   def test_should_sign_up_user_in_pending_state
     create_user
     assigns(:user).reload
-    assert assigns(:user).pending?
+    assert assigns(:user).pending?, 'User should be pending'
   end
   
   def test_should_sign_up_user_with_activation_code
@@ -79,15 +79,11 @@ class UsersControllerTest < ActionController::TestCase
   def test_should_not_activate_user_without_key
     get :activate
     assert_nil flash[:notice]
-  rescue ActionController::RoutingError
-    # in the event your routes deny this, we'll just bow out gracefully.
   end
 
   def test_should_not_activate_user_with_blank_key
     get :activate, :activation_code => ''
     assert_nil flash[:notice]
-  rescue ActionController::RoutingError
-    # well played, sir
   end
 
   def test_should_send_email_on_signup
