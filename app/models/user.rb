@@ -30,9 +30,9 @@ class User < ActiveRecord::Base
   validates_length_of       :password, :within => 4..40, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
 
-  validates_presence_of     :login,                      :unless => :creating_with_open_id?
-  validates_length_of       :login, :within => 3..40,     :unless => :creating_with_open_id?
-  validates_uniqueness_of   :login, :case_sensitive => false, :unless => :creating_with_open_id?
+  validates_presence_of     :login,                      :unless => :using_open_id?
+  validates_length_of       :login, :within => 3..40,     :unless => :using_open_id?
+  validates_uniqueness_of   :login, :case_sensitive => false, :unless => :using_open_id?
 
   validates_presence_of     :email,                      :unless => :creating_with_open_id?
   validates_length_of       :email, :within => 3..254,   :unless => :creating_with_open_id?

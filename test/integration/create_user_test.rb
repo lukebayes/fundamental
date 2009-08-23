@@ -18,17 +18,21 @@ class CreateUserTest < ActionController::IntegrationTest
   def test_signup_using_open_id
     identity_url = 'http://openid.example.com'
     stub_open_id_creation identity_url
+    user = nil
 
     assert_difference 'User.count' do
+      # Create the new openid user
       post users_path, :openid_url => identity_url
       user = User.last
+      # Redirect to edit path
       assert_redirected_to edit_user_path(user)
     end
 
-    put users_path, :user => default_user(:password => nil, :password_confirmation => nil)
+    # Commit the edit with a valid email address
+    put user_path(user), :user => default_user(:email => 'abc@example.com', :password => nil, :password_confirmation => nil)
 
-    user = User.last
-
-    assert user.valid?
+    user.reload 
+    # Ensure the newly created user is valid
+    assert user.valid?, "Should be valid, but has: #{user.errors.full_messages}"
   end
 end
