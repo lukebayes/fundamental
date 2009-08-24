@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(:version => 20090823223617) do
     t.datetime "updated_at"
     t.string   "remember_token"
     t.datetime "remember_token_expires_at"
-    t.string   "email_activation_code",     :limit => 40
-    t.datetime "email_activated_at"
+    t.string   "email_verification_code",   :limit => 40
+    t.datetime "email_verified_at"
     t.string   "state",                                   :default => "passive"
     t.datetime "deleted_at"
     t.string   "name"

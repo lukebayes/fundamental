@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
+require 'shoulda'
 
 class ActiveSupport::TestCase
   include AuthenticatedTestHelper
@@ -36,6 +37,8 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
+  protected
+
   # Add more helper methods to be used by all tests here...
   def stub_open_id_creation(identity_url, successful=true)
     result = {}
@@ -50,6 +53,14 @@ class ActiveSupport::TestCase
        :password => 'quire',
        :password_confirmation => 'quire'
     }.merge(options)
+  end
+
+  def clear_deliveries
+    ActionMailer::Base.deliveries = []
+  end
+
+  def email_deliveries
+    ActionMailer::Base.deliveries
   end
 
 end

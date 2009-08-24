@@ -11,9 +11,6 @@ class SiteUser < User
 
   before_save :encrypt_password
 
-  # State Declarations:
-  state :active
-  
   # Event Declarations:
   event :activate do
     transitions :from => :passive, :to => :active, :guard => Proc.new {|u| u.valid? && !(u.crypted_password.blank? && u.password.blank?) }

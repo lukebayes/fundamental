@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/user_test_base'
-require 'shoulda'
 
 class SiteUserTest < UserTestBase
 
@@ -23,6 +22,16 @@ class SiteUserTest < UserTestBase
       @user.activate!
     end
 
+    # TODO: Why do I have to call activate! a second time?
+    should "be active" do
+      @user.activate!
+      assert @user.active?
+    end
+
+    should "be valid" do
+      assert @user.valid?
+    end
+
     should "have a crypted password" do
       assert_not_nil @user.crypted_password
     end
@@ -32,12 +41,7 @@ class SiteUserTest < UserTestBase
     end
 
     should "send email activation" do
-      assert_equal 1, ActionMailer::Base.deliveries.size
-    end
-
-    should "support email activation" do
-      @user.verify_email!
-      assert_equal 2, ActionMailer::Base.deliveries.size
+      assert_equal 1, email_deliveries.size
     end
 
     context "fail authentication with" do
@@ -48,24 +52,6 @@ class SiteUserTest < UserTestBase
       should "bad password" do
         assert_nil SiteUser.authenticate(@user.email, 'abc')
       end
-    end
-
-  end
-
-  context "An active SiteUser" do
-
-    setup do
-      @user = users(:quentin)
-    end
-
-    should "not send verification email unless email is changed" do
-      @user.update_attribute(:name, "Quentain")
-      assert_equal 0, ActionMailer::Base.deliveries.size
-    end
-
-    should "send verification email when email is changed" do
-      @user.update_attribute(:email, "123@example.com")
-      assert_equal 1, ActionMailer::Base.deliveries.size
     end
 
   end

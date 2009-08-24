@@ -3,12 +3,12 @@ class UserMailer < ActionMailer::Base
   def email_verification(user)
     setup_email(user)
     @subject    += ': Please verify your email address'
-    @body[:url]  = "#{APP_CONFIG[:site_url]}/activate/#{user.email_activation_code}"
+    @body[:url]  = "#{APP_CONFIG[:site_url]}/activate/#{user.email_verification_code}"
   end
   
   def email_confirmation(user)
     setup_email(user)
-    @subject    += ': You email address has been verified!'
+    @subject    += ': Your email address has been verified!'
     @body[:url]  = APP_CONFIG[:site_url]
   end
   

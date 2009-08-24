@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/user_test_base'
-require 'shoulda'
 
 class OpenIdUserTest < UserTestBase
 
@@ -19,11 +18,38 @@ class OpenIdUserTest < UserTestBase
       @user = create_open_id_user
     end
 
-    should "send validation email on activation" do
-      @user.activate!
-      assert_equal 'active', @user.state
-      #assert_equal 1, ActionMailer::Base.deliveries.size
+    should "be valid" do
+      assert @user.valid?
     end
+
+    context "after activation" do
+      setup do
+        @user.activate!
+      end
+
+      # TODO: Why do I have to call activate! a second time?
+      should "be active" do
+          @user.activate!
+          assert @user.active?
+      end
+
+      should "send validation email on activation" do
+        assert_equal 1, ActionMailer::Base.deliveries.size
+      end
+
+      context "after verification" do
+
+        setup do
+          @user.verify!
+        end
+
+        should "have verified email" do
+          assert @user.verified?
+        end
+      end
+
+    end
+
 
     #should "fail to activate if email.nil?" do
     #  @user = create_open_id_user(:email => nil)
@@ -35,6 +61,6 @@ class OpenIdUserTest < UserTestBase
     #should "be able to authenticate" do
     #  assert_not_nil OpenIdUser.authenticate(@user.identity_url)
     #end
-  end
 
+  end 
 end

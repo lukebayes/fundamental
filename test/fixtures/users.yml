@@ -25,25 +25,25 @@ quentin:
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 5.days.ago.to_s :db %>
-  email_activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9b
-  email_activated_at: <%= 5.days.ago.to_s :db %>
-  state: active
+  email_verification_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9b
+  email_verified_at: <%= 5.days.ago.to_s :db %>
+  state: verified
   type: SiteUser
 aaron:
   email: aaron@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
-  email_activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
-  email_activated_at: <%= 3.days.ago.to_s :db %>
-  state: active
+  email_verification_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a
+  email_verified_at: <%= 3.days.ago.to_s :db %>
+  state: verified
   type: SiteUser
 sean:
   name: Sean Hannity
   email: sean@example.com
   created_at: <%= 20.days.ago.to_s :db %>
-  state: active
+  state: verified
   type: OpenIdUser
   identity_url: http://openid.example.com/sean.hannity
-  email_activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a
-  email_activated_at: <%= 3.days.ago.to_s :db %>
+  email_verification_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a
+  email_verified_at: <%= 3.days.ago.to_s :db %>

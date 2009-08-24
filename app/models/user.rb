@@ -21,6 +21,7 @@
 #
 
 class User < ActiveRecord::Base
+  DEFAULT_LABEL = 'Anonymous'
 
   # Make new method into a User Factory:
   def self.new(options={})
@@ -30,6 +31,7 @@ class User < ActiveRecord::Base
     object
   end
 
+  # Concrete classes will decide when to validate_presence_of :email
   validates_length_of       :email, :within => 3..254
   validates_uniqueness_of   :email, :case_sensitive => false
   validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
@@ -37,29 +39,31 @@ class User < ActiveRecord::Base
   acts_as_state_machine :initial => :passive
 
   state :passive
+  state :active
+  state :verified, :enter => :on_verified
 
-  before_save :create_email_activation_code, :if => :email_changed?
-
-  def recently_verified_email?
-    @email_verified ||= false
+  event :verify do
+    transitions :from => [:passive, :active], :to => :verified, :guard => Proc.new { |u| !u.email.blank? }
   end
 
-  def verify_email!
-    verify_email.save!
-  end
+  before_save :create_email_verification_code, :if => :email_changed?
 
-  def verify_email
-    @email_verified = true
-    self.email_activated_at = Time.now.utc
-    self.deleted_at = self.email_activation_code = nil
-    self
+  def recently_verified?
+    @recently_verified ||= false
   end
 
   def label
-    name || email
+    name || (email.blank?) ? DEFAULT_LABEL : email.split('@').shift
   end
 
   protected
+
+  def on_verified
+    @recently_verified = true
+    self.email_verified_at = Time.now.utc
+    self.deleted_at = self.email_verification_code = nil
+    self
+  end
   
   # Encrypts some data with the salt.
   def encrypt(password, salt=nil)
@@ -67,12 +71,26 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest("--#{salt}--#{password}--")
   end
 
-  def create_email_activation_code
-    self.deleted_at = nil
-    self.email_activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+  def create_email_verification_code
+    self.deleted_at = self.email_verified_at = nil
+    self.email_verification_code = ActiveSupport::SecureRandom.hex(6)
   end
 
-
+  #event :suspend do
+  #  transitions :from => [:passive, :pending, :active], :to => :suspended
+  #end
+  #
+  #event :delete do
+  #  transitions :from => [:passive, :pending, :active, :suspended], :to => :deleted
+  #end
+  #
+  #event :unsuspend do
+  #  transitions :from => :suspended, :to => :active,  :guard => Proc.new {|u| !u.activated_at.blank? }
+  #  transitions :from => :suspended, :to => :pending, :guard => Proc.new {|u| !u.activation_code.blank? }
+  #  transitions :from => :suspended, :to => :passive
+  #end
+  #
+  
   #validates_uniqueness_of   :identity_url, :if => :using_open_id?
   #
   #
@@ -90,20 +108,6 @@ class User < ActiveRecord::Base
   #
   #event :activate do
   #  transitions :from => :pending, :to => :active
-  #end
-  #
-  #event :suspend do
-  #  transitions :from => [:passive, :pending, :active], :to => :suspended
-  #end
-  #
-  #event :delete do
-  #  transitions :from => [:passive, :pending, :active, :suspended], :to => :deleted
-  #end
-  #
-  #event :unsuspend do
-  #  transitions :from => :suspended, :to => :active,  :guard => Proc.new {|u| !u.activated_at.blank? }
-  #  transitions :from => :suspended, :to => :pending, :guard => Proc.new {|u| !u.activation_code.blank? }
-  #  transitions :from => :suspended, :to => :passive
   #end
   #
   ## Authenticates a user by their login name and unencrypted password.  Returns the user or nil.

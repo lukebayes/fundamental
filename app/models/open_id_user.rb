@@ -24,7 +24,6 @@ class OpenIdUser < User
   protected
 
   def on_activated
-    puts "ON ACTIVATED CALLED WITH: #{valid?}"
     @recently_activated = true
   end
 
