@@ -20,11 +20,11 @@ class SiteUserTest < UserTestBase
     setup do
       @user = create_site_user
       @user.activate!
+      # TODO: Why do I have to call activate! a second time?
+      @user.activate!
     end
 
-    # TODO: Why do I have to call activate! a second time?
     should "be active" do
-      @user.activate!
       assert @user.active?
     end
 
@@ -34,10 +34,6 @@ class SiteUserTest < UserTestBase
 
     should "have a crypted password" do
       assert_not_nil @user.crypted_password
-    end
-
-    should "be able to authenticate" do
-      assert_not_nil SiteUser.authenticate(@user.email, @user.password)
     end
 
     should "send email activation" do

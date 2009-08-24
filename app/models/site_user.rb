@@ -21,12 +21,12 @@ class SiteUser < User
 
   # Only authenticates SiteUsers...
   def self.authenticate(email, password)
-    u = SiteUser.find :first, :conditions => ['email = ?', email] # need to get the salt
+    u = SiteUser.find_by_email(email)
     u && u.authenticated?(password) ? u : nil
   end
 
   def authenticated?(password)
-    crypted_password == encrypt(password)
+    (verified? || active?) && (crypted_password == encrypt(password))
   end
 
   protected

@@ -36,18 +36,26 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email, :case_sensitive => false
   validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
   
+  before_save :create_email_verification_code, :if => :email_changed?
+
+  # State Machine Configuration:
   acts_as_state_machine :initial => :passive
 
   state :passive
   state :active
   state :verified, :enter => :on_verified
+  state :suspended
+  state :deleted, :enter => :on_deleted
 
   event :verify do
     transitions :from => [:passive, :active], :to => :verified, :guard => Proc.new { |u| !u.email.blank? }
   end
 
-  before_save :create_email_verification_code, :if => :email_changed?
+  event :suspend do
+    transitions :from => [:passive, :active, :verified], :to => :suspended
+  end
 
+  # Public Methods:
   def recently_verified?
     @recently_verified ||= false
   end
@@ -76,10 +84,10 @@ class User < ActiveRecord::Base
     self.email_verification_code = ActiveSupport::SecureRandom.hex(6)
   end
 
-  #event :suspend do
-  #  transitions :from => [:passive, :pending, :active], :to => :suspended
-  #end
-  #
+  def on_deleted
+    self.deleted_at = Time.now.utc
+  end
+
   #event :delete do
   #  transitions :from => [:passive, :pending, :active, :suspended], :to => :deleted
   #end
@@ -164,10 +172,6 @@ class User < ActiveRecord::Base
   #
   #def creating_with_open_id?
   #  using_open_id? && new_record?
-  #end
-  #
-  #def do_delete
-  #  self.deleted_at = Time.now.utc
   #end
   #
 end

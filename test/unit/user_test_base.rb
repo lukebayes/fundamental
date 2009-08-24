@@ -13,7 +13,7 @@ class UserTestBase < ActiveSupport::TestCase
   end
 
   def create_site_user(options = {})
-    User.new({ :name => 'Quire McMan', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    User.new({ :name => 'Quire McMan', :email => 'quire@example.com', :password => 'test', :password_confirmation => 'test' }.merge(options))
   end
 end
 
