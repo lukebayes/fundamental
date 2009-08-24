@@ -23,6 +23,9 @@
 class User < ActiveRecord::Base
   DEFAULT_LABEL = 'Anonymous'
 
+  # Virtual attribute for the password
+  attr_accessor :password, :password_confirmation
+  
   # Make new method into a User Factory:
   def self.new(options={})
     object = OpenIdUser.allocate unless options[:identity_url].blank?
@@ -47,7 +50,7 @@ class User < ActiveRecord::Base
   state :suspended
   state :deleted, :enter => :on_deleted
 
-  event :verify do
+  event :verify_email do
     transitions :from => [:passive, :active], :to => :verified, :guard => Proc.new { |u| !u.email.blank? }
   end
 

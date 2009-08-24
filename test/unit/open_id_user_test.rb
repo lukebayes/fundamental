@@ -40,7 +40,7 @@ class OpenIdUserTest < UserTestBase
       context "after verification" do
 
         setup do
-          @user.verify!
+          @user.verify_email!
         end
 
         should "have verified email" do

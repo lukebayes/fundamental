@@ -17,10 +17,10 @@ class UserTest < UserTestBase
     end
 
     should "send confirmation email" do
-      @user.verify!
+      @user.verify_email!
       @user.save!
       # One to request email verification after first creation
-      # One to acknowledge email verification from verify!
+      # One to acknowledge email verification from verify_email!
       # NOT a third from second call to save!
       assert_equal 2, email_deliveries.size
     end

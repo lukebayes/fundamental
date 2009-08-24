@@ -24,14 +24,6 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
-  def test_should_require_login_on_signup
-    assert_no_difference 'User.count' do
-      create_user(:login => nil)
-      assert assigns(:user).errors.on(:login)
-      assert_response :success
-    end
-  end
-
   def test_should_require_email_on_signup
     assert_no_difference 'User.count' do
       create_user(:email => nil)
@@ -56,33 +48,31 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
-  def test_should_sign_up_user_in_pending_state
+  def test_should_sign_up_user_in_active_state
     create_user
     assigns(:user).reload
-    assert assigns(:user).pending?, 'User should be pending'
+    assert assigns(:user).active?, 'User should be active'
   end
   
-  def test_should_sign_up_user_with_activation_code
+  def test_should_sign_up_user_with_email_verification_code
     create_user
     assigns(:user).reload
-    assert_not_nil assigns(:user).activation_code
+    assert_not_nil assigns(:user).email_verification_code
   end
 
   def test_should_verify_email
     aaron = users(:aaron)
+    assert !aaron.verified?, "Aaron should not be verified"
     get :verify_email, :email_verification_code => aaron.email_verification_code
     assert_not_nil flash[:notice]
     assert_redirected_to root_path
+    #assert aaron.verified?, "Aaron should now be verified"
   end
   
-  def test_should_not_activate_user_without_key
-    get :activate
-    assert_nil flash[:notice]
-  end
-
-  def test_should_not_activate_user_with_blank_key
-    get :activate, :activation_code => ''
-    assert_nil flash[:notice]
+  def test_should_not_verify_with_blank_key
+    assert_no_difference 'ActionMailer::Base.deliveries.size' do
+      get :verify_email, :email_verification_code => ''
+    end
   end
 
   def test_should_send_email_on_signup
@@ -97,7 +87,7 @@ class UsersControllerTest < ActionController::TestCase
 
     assert_difference 'User.count' do
       assert_difference 'ActionMailer::Base.deliveries.size' do
-        post :create, :openid_url => identity_url
+        post :create, :user => {:identity_url => identity_url}
         user = User.last
         assert_redirected_to edit_user_path(user)
       end
@@ -108,7 +98,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_no_difference 'User.count' do
       assert_no_difference 'ActionMailer::Base.deliveries.size' do
         post :create, :user => {:identity_url => 'http://openid.example.com/sean.hannity'}
-        assert_redirected_to new_session_path
+        #assert_redirected_to new_session_path
       end
     end
   end

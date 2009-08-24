@@ -48,10 +48,10 @@ class ActiveSupport::TestCase
 
   def default_user_options(options = {})
     {
-       :login => 'quire',
-       :email => 'quire@example.com',
-       :password => 'quire',
-       :password_confirmation => 'quire'
+       :email => 'some.body@example.com',
+       :name => 'Some Body',
+       :password => 'test',
+       :password_confirmation => 'test'
     }.merge(options)
   end
 

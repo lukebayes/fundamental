@@ -36,7 +36,16 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
     @user = User.new(params[:user])
+    if(@user.valid?)
+      # TODO: Why do I have to call activate twice?!
+      @user.activate!
+      @user.activate!
+    else
+      return render(:new)
+    end
+
     if(@user.using_open_id?)
+      puts ">> creating using open id"
       create_open_id_user
     else
       create_site_user
@@ -45,10 +54,13 @@ class UsersController < ApplicationController
 
   def verify_email
     self.current_user = (params[:email_verification_code].blank?) ? false : User.find_by_email_verification_code(params[:email_verification_code])
-    if logged_in? && !current_user.verified?
-      current_user.verify!
+    if logged_in?
+      current_user.verify_email!
+      current_user.save!
       flash[:notice] = "Your email address has been verified."
     end
+    # TODO: Add support for resending a new code:
+    flash[:notice] = "We were unable to verify your email with the code provided."
     redirect_back_or_default
   end
 
@@ -83,7 +95,6 @@ class UsersController < ApplicationController
   end
 
   def create_site_user
-    @user.activate!
     if @user.errors.empty?
       flash[:notice] = "Thanks for signing up, please check your email to verify your account."
       self.current_user = @user
@@ -94,7 +105,10 @@ class UsersController < ApplicationController
   end
 
   def create_open_id_user
-    authenticate_with_open_id(params[:identity_url], :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
+    puts "-------------------"
+    puts " about to auth"
+    authenticate_with_open_id(@user.identity_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
+      puts "inside closure with: #{result.successful?}"
       if result.successful?
         finish_creating_open_id_user get_options_from_open_id_params(params, identity_url)
       else
