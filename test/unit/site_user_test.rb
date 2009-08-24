@@ -9,18 +9,43 @@ class SiteUserTest < UserTestBase
   should_allow_values_for     :password, 'abc'
   should_not_allow_values_for :email, 'a', 'abcdef', 'a@bcd', 'a@.com'
   
-  context "A SiteUser instance" do
+  context "A new SiteUser" do
 
     setup do
+      ActionMailer::Base.deliveries = []
       @user = create_site_user
-      @user.save!
+      @user.register!
     end
 
     should "have a crypted password" do
       assert_not_nil @user.crypted_password
     end
-  end
 
+    should "be able to authenticate" do
+      assert_not_nil SiteUser.authenticate(@user.email, @user.password)
+    end
+
+    should "send email activation" do
+      assert_equal 1, ActionMailer::Base.deliveries.size
+    end
+
+    should "support email activation" do
+      @user.verify_email!
+      assert_equal 2, ActionMailer::Base.deliveries.size
+    end
+
+    context "fail authentication with" do
+      should "bad email" do
+        assert_nil SiteUser.authenticate('abc@def.com', @user.password)
+      end
+
+      should "bad password" do
+        assert_nil SiteUser.authenticate(@user.email, 'abc')
+      end
+    end
+
+  end
+  
   #def test_should_create_user
   #  assert_difference 'User.count' do
   #    user = create_user

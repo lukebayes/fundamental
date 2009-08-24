@@ -10,8 +10,6 @@ class UserTestBase < ActiveSupport::TestCase
 
   def create_site_user(options = {})
     record = User.new({ :name => 'Quire McMan', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
-    #record.register! if record.valid?
-    record
   end
 end
 

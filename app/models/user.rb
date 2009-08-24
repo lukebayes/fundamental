@@ -22,16 +22,41 @@
 
 class User < ActiveRecord::Base
 
-  # Make new method into a User Factory: 
+  # Make new method into a User Factory:
   def self.new(options=nil)
     object = SiteUser.allocate
     object.send :initialize, options
     object
   end
 
+  validates_length_of       :email, :within => 3..254
+  validates_uniqueness_of   :email, :case_sensitive => false
+  validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+  
   acts_as_state_machine :initial => :passive
 
   state :passive
+
+  before_save :make_activation_code
+
+  def recently_verified_email?
+    @email_verified ||= false
+  end
+
+  def verify_email!
+    verify_email.save!
+  end
+
+  def verify_email
+    @email_verified = true
+    self.email_activated_at = Time.now.utc
+    self.deleted_at = self.email_activation_code = nil
+    self
+  end
+
+  def label
+    name || email
+  end
 
   protected
   
@@ -40,6 +65,14 @@ class User < ActiveRecord::Base
     salt ||= self.salt
     Digest::SHA1.hexdigest("--#{salt}--#{password}--")
   end
+
+  def make_activation_code
+    if(email_changed?)
+      self.deleted_at = nil
+      self.email_activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
+    end
+  end
+
 
 
   #validates_uniqueness_of   :identity_url, :if => :using_open_id?
@@ -76,10 +109,6 @@ class User < ActiveRecord::Base
   #end
   #
   ## Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
-  #def self.authenticate(login, password)
-  #  u = find_in_state :first, :active, :conditions => ['login = ? or email = ?', login, login] # need to get the salt
-  #  u && u.authenticated?(password) ? u : nil
-  #end
   #
   #
   #def label
@@ -119,11 +148,6 @@ class User < ActiveRecord::Base
   #  self.remember_token_expires_at = nil
   #  self.remember_token            = nil
   #  save(false)
-  #end
-  #
-  ## Returns true if the user has just been activated.
-  #def recently_activated?
-  #  @activated
   #end
   #
   #def using_open_id?
