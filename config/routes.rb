@@ -1,5 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :users, :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
+  map.resources :users,         :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
+  map.resources :site_users,    :controller => 'users', :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
+  map.resources :open_id_users, :controller => 'users', :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
+
   map.resource :session
 
   map.open_id_complete '/opensession', :controller => "sessions", :action => "create", :requirements => { :method => :get }
@@ -10,7 +13,7 @@ ActionController::Routing::Routes.draw do |map|
   map.register '/register', :controller => 'users', :action => 'create'
   map.signup '/signup', :controller => 'users', :action => 'new'
 
-  map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
+  map.verify_email '/verify_email/:email_verification_code', :controller => 'users', :action => 'verify_email'
 
   map.root :controller => 'site', :action => 'index'
 

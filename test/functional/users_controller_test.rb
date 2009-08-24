@@ -9,7 +9,7 @@ class UsersControllerTest < ActionController::TestCase
   # Then, you can remove it from this and the units test.
   include AuthenticatedTestHelper
 
-  fixtures :users
+  fixtures :all
 
   def setup
     @controller = UsersController.new
@@ -68,12 +68,11 @@ class UsersControllerTest < ActionController::TestCase
     assert_not_nil assigns(:user).activation_code
   end
 
-  def test_should_activate_user
-    assert_nil User.authenticate('aaron', 'test')
-    get :activate, :activation_code => users(:aaron).activation_code
-    assert_redirected_to root_path
+  def test_should_verify_email
+    aaron = users(:aaron)
+    get :verify_email, :email_verification_code => aaron.email_verification_code
     assert_not_nil flash[:notice]
-    assert_equal users(:aaron), User.authenticate('aaron', 'test')
+    assert_redirected_to root_path
   end
   
   def test_should_not_activate_user_without_key
@@ -106,14 +105,9 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   def test_should_fail_with_existing_open_id_for_signup
-    identity_url = 'http://openid.example.com'
-    existing = User.new(:identity_url => identity_url)
-    existing.save(false)
-
-    stub_open_id_creation identity_url
     assert_no_difference 'User.count' do
       assert_no_difference 'ActionMailer::Base.deliveries.size' do
-        post :create, :openid_url => identity_url
+        post :create, :user => {:identity_url => 'http://openid.example.com/sean.hannity'}
         assert_redirected_to new_session_path
       end
     end

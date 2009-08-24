@@ -36,7 +36,7 @@ aaron:
   created_at: <%= 1.days.ago.to_s :db %>
   email_verification_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a
   email_verified_at: <%= 3.days.ago.to_s :db %>
-  state: verified
+  state: active
   type: SiteUser
 sean:
   name: Sean Hannity

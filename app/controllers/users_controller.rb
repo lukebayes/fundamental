@@ -35,26 +35,19 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    if !using_open_id?
-      @user = create_user(params[:user])
-      @user.register!
-      if @user.errors.empty?
-        flash[:notice] = "Thanks for signing up, please check your email to finish account activation."
-        self.current_user = @user
-        redirect_back_or_default
-      else
-        render :action => 'new'
-      end
-    else
+    @user = User.new(params[:user])
+    if(@user.using_open_id?)
       create_open_id_user
+    else
+      create_site_user
     end
   end
 
-  def activate
-    self.current_user = params[:email_verification_code].blank? ? false : User.find_by_activation_code(params[:email_verification_code])
-    if logged_in? && !current_user.active?
-      current_user.activate!
-      flash[:notice] = "Sign up is complete!"
+  def verify_email
+    self.current_user = (params[:email_verification_code].blank?) ? false : User.find_by_email_verification_code(params[:email_verification_code])
+    if logged_in? && !current_user.verified?
+      current_user.verify!
+      flash[:notice] = "Your email address has been verified."
     end
     redirect_back_or_default
   end
@@ -89,8 +82,15 @@ class UsersController < ApplicationController
     (current_user == @user) || access_denied
   end
 
-  def create_user(attributes)
-    User.new(attributes)    
+  def create_site_user
+    @user.activate!
+    if @user.errors.empty?
+      flash[:notice] = "Thanks for signing up, please check your email to verify your account."
+      self.current_user = @user
+      redirect_back_or_default
+    else
+      render :action => 'new'
+    end
   end
 
   def create_open_id_user

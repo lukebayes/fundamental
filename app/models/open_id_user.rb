@@ -21,6 +21,10 @@ class OpenIdUser < User
     user = OpenIdUser.find_by_identity_url(identity_url)
   end
 
+  def using_open_id?
+    true
+  end
+
   protected
 
   def on_activated

@@ -64,6 +64,10 @@ class User < ActiveRecord::Base
     name || (email.blank?) ? DEFAULT_LABEL : email.split('@').shift
   end
 
+  def using_open_id?
+    false
+  end
+
   protected
 
   def on_verified
