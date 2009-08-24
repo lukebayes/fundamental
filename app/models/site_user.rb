@@ -5,25 +5,26 @@ class SiteUser < User
   attr_accessor :password
 
   # Validations:
-  validates_presence_of     :password, :password_confirmation
+  validates_presence_of     :password, :password_confirmation, :email
   validates_length_of       :password, :within => 3..40
   validates_confirmation_of :password
-  validates_presence_of     :email
 
   before_save :encrypt_password
 
   # State Declarations:
   state :active
   
-  attr_accessible :email, :name, :password, :password_confirmation
-
   # Event Declarations:
-  event :register do
+  event :activate do
     transitions :from => :passive, :to => :active, :guard => Proc.new {|u| u.valid? && !(u.crypted_password.blank? && u.password.blank?) }
   end
 
+  # Accessible Attributes: 
+  attr_accessible :email, :name, :password, :password_confirmation
+
+  # Only authenticates SiteUsers...
   def self.authenticate(email, password)
-    u = find :first, :conditions => ['email = ?', email] # need to get the salt
+    u = SiteUser.find :first, :conditions => ['email = ?', email] # need to get the salt
     u && u.authenticated?(password) ? u : nil
   end
 

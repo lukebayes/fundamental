@@ -23,10 +23,9 @@
 class User < ActiveRecord::Base
 
   # Make new method into a User Factory:
-  def self.new(options=nil)
-    options ||= {}
-    object = SiteUser.allocate if(options[:identity_url].blank?)
-    
+  def self.new(options={})
+    object = OpenIdUser.allocate unless options[:identity_url].blank?
+    object ||= SiteUser.allocate
     object.send :initialize, options
     object
   end
@@ -72,7 +71,6 @@ class User < ActiveRecord::Base
     self.deleted_at = nil
     self.email_activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
   end
-
 
 
   #validates_uniqueness_of   :identity_url, :if => :using_open_id?

@@ -8,8 +8,12 @@ class UserTestBase < ActiveSupport::TestCase
 
   protected
 
+  def create_open_id_user(options = {})
+    User.new({ :name => 'Bob Dobbs', :identity_url => 'http://openid.example.com', :email => 'bob.dobbs@example.com' }.merge(options))
+  end
+
   def create_site_user(options = {})
-    record = User.new({ :name => 'Quire McMan', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
+    User.new({ :name => 'Quire McMan', :email => 'quire@example.com', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
   end
 end
 

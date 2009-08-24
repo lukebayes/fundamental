@@ -21,7 +21,6 @@
 #
 
 quentin:
-  id: 1
   email: quentin@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
@@ -31,7 +30,6 @@ quentin:
   state: active
   type: SiteUser
 aaron:
-  id: 2
   email: aaron@example.com
   salt: 7e3041ebc2fc05a40c60028e2c4901a81035d3cd
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
@@ -40,3 +38,12 @@ aaron:
   email_activated_at: <%= 3.days.ago.to_s :db %>
   state: active
   type: SiteUser
+sean:
+  name: Sean Hannity
+  email: sean@example.com
+  created_at: <%= 20.days.ago.to_s :db %>
+  state: active
+  type: OpenIdUser
+  identity_url: http://openid.example.com/sean.hannity
+  email_activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a
+  email_activated_at: <%= 3.days.ago.to_s :db %>

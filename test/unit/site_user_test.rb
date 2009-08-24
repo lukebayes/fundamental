@@ -4,10 +4,13 @@ require 'shoulda'
 
 class SiteUserTest < UserTestBase
 
-  should_validate_presence_of :password, :password_confirmation, :email
-  should_not_allow_values_for :password, 'a', 'ab'
-  should_allow_values_for     :password, 'abc'
-  should_not_allow_values_for :email, 'a', 'abcdef', 'a@bcd', 'a@.com'
+  subject { SiteUser.first }
+
+  should_validate_presence_of   :password, :password_confirmation, :email
+  should_not_allow_values_for   :password, 'a', 'ab'
+  should_allow_values_for       :password, 'abc'
+  should_validate_uniqueness_of :email
+  should_not_allow_values_for   :email, 'a', 'abcdef', 'a@bcd', 'a@.com'
 
   setup do
     ActionMailer::Base.deliveries = []
@@ -17,7 +20,7 @@ class SiteUserTest < UserTestBase
 
     setup do
       @user = create_site_user
-      @user.register!
+      @user.activate!
     end
 
     should "have a crypted password" do
