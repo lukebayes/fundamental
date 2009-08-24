@@ -14,7 +14,7 @@ class CreateUserTest < ActionController::IntegrationTest
       get activate_path(user.activation_code)
     end
   end
-  
+
   def test_signup_using_open_id
     identity_url = 'http://openid.example.com'
     stub_open_id_creation identity_url
@@ -31,7 +31,7 @@ class CreateUserTest < ActionController::IntegrationTest
     # Commit the edit with a valid email address
     put user_path(user), :user => default_user_options(:email => 'abc@example.com', :password => nil, :password_confirmation => nil)
 
-    user.reload 
+    user.reload
     # Ensure the newly created user is valid
     assert user.valid?, "Should be valid, but has: #{user.errors.full_messages}"
   end
