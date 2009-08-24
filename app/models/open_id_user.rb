@@ -1,4 +1,5 @@
 
 class OpenIdUser < User
 
+  
 end

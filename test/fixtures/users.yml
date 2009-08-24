@@ -29,6 +29,7 @@ quentin:
   email_activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9b
   email_activated_at: <%= 5.days.ago.to_s :db %>
   state: active
+  type: SiteUser
 aaron:
   id: 2
   email: aaron@example.com
@@ -36,4 +37,6 @@ aaron:
   crypted_password: 00742970dc9e6319f8019fd54864d3ea740f04b1 # test
   created_at: <%= 1.days.ago.to_s :db %>
   email_activation_code: 8f24789ae988411ccf33ab0c30fe9106fab32e9a 
-  state: pending
+  email_activated_at: <%= 3.days.ago.to_s :db %>
+  state: active
+  type: SiteUser

@@ -24,7 +24,9 @@ class User < ActiveRecord::Base
 
   # Make new method into a User Factory:
   def self.new(options=nil)
-    object = SiteUser.allocate
+    options ||= {}
+    object = SiteUser.allocate if(options[:identity_url].blank?)
+    
     object.send :initialize, options
     object
   end
@@ -37,7 +39,7 @@ class User < ActiveRecord::Base
 
   state :passive
 
-  before_save :make_activation_code
+  before_save :create_email_activation_code, :if => :email_changed?
 
   def recently_verified_email?
     @email_verified ||= false
@@ -66,11 +68,9 @@ class User < ActiveRecord::Base
     Digest::SHA1.hexdigest("--#{salt}--#{password}--")
   end
 
-  def make_activation_code
-    if(email_changed?)
-      self.deleted_at = nil
-      self.email_activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
-    end
+  def create_email_activation_code
+    self.deleted_at = nil
+    self.email_activation_code = Digest::SHA1.hexdigest( Time.now.to_s.split(//).sort_by {rand}.join )
   end
 
 
