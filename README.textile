@@ -18,7 +18,7 @@ h3. Roadmap
 
 The Fundamental task list is being managed by Pivotal Tracker, and can be viewed here:
 
-http://www.pivotaltracker.com/projects/24964
+"http://www.pivotaltracker.com/projects/24964":http://www.pivotaltracker.com/projects/24964
 
 h3. Contributing
 
@@ -28,11 +28,11 @@ h3. Continuous Integration:
 
 The current status of the build can be found here:
 
-http://runcoderun.com/lukebayes/fundamental
+"http://runcoderun.com/lukebayes/fundamental":http://runcoderun.com/lukebayes/fundamental
 
 h3. Staging Release:
 
 The current deployment can be found here:
 
-http://fundamental.heroku.com/
+"http://fundamental.heroku.com/":http://fundamental.heroku.com/
 
