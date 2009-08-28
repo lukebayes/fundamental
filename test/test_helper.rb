@@ -39,6 +39,22 @@ class ActiveSupport::TestCase
 
   protected
 
+  def create_open_id_user(options = {})
+    User.new(open_id_user_hash(options))
+  end
+
+  def open_id_user_hash(options = {})
+    { :name => 'Bob Dobbs', :identity_url => 'http://openid.example.com', :email => 'bob.dobbs@example.com' }.merge(options)
+  end
+
+  def create_site_user(options = {})
+    User.new(site_user_hash(options))
+  end
+
+  def site_user_hash(options = {})
+    { :name => 'Quire McMan', :email => 'quire@example.com', :password => 'test', :password_confirmation => 'test' }.merge(options)
+  end
+
   # Add more helper methods to be used by all tests here...
   def stub_open_id_creation(identity_url, successful=true)
     result = {}

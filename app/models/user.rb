@@ -27,10 +27,12 @@ class User < ActiveRecord::Base
   attr_accessor :password, :password_confirmation
   
   # Make new method into a User Factory:
-  def self.new(options={})
+  def self.new(options=nil)
+    options ||= {}
     object = OpenIdUser.allocate unless options[:identity_url].blank?
     object ||= SiteUser.allocate
     object.send :initialize, options
+    puts "created new user with: #{object.email}"
     object
   end
 

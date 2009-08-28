@@ -1,11 +1,12 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/user_test_base'
 
-class UserTest < UserTestBase
+class UserTest < ActiveSupport::TestCase
 
   fixtures :users
   
   context "A new User" do
+
     setup do
       clear_deliveries
       @user = create_site_user

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/user_test_base'
 
-class SiteUserTest < UserTestBase
+class SiteUserTest < ActiveSupport::TestCase
 
   subject { SiteUser.first }
 
@@ -40,16 +40,16 @@ class SiteUserTest < UserTestBase
       assert_equal 1, email_deliveries.size
     end
 
-    context "fail authentication with" do
-      should "bad email" do
-        assert_nil SiteUser.authenticate('abc@def.com', @user.password)
-      end
-
-      should "bad password" do
-        assert_nil SiteUser.authenticate(@user.email, 'abc')
-      end
+    should "authenticate" do
+      assert SiteUser.authenticate(@user.email, @user.password)
     end
 
-  end
+    should "fail to authenticate due to email" do
+      assert_nil SiteUser.authenticate('abc@def.com', @user.password)
+    end
 
+    should "fail to authenticate due to password" do
+      assert_nil SiteUser.authenticate(@user.email, 'abc')
+    end
+  end
 end

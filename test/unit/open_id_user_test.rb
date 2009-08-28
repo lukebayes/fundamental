@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 require File.dirname(__FILE__) + '/user_test_base'
 
-class OpenIdUserTest < UserTestBase
+class OpenIdUserTest < ActiveSupport::TestCase
 
   subject { create_open_id_user }
 
