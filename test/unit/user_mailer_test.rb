@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'user_mailer'
 
-class UserMailerTest < Test::Unit::TestCase
+class UserMailerTest < ActiveSupport::TestCase
   FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures'
   CHARSET = "utf-8"
 
@@ -16,7 +15,6 @@ class UserMailerTest < Test::Unit::TestCase
     @expected.set_content_type "text", "plain", { "charset" => CHARSET }
   end
 
-  # TODO: Add tests for the UserMailer features 
   def test_nothing
     assert true
   end

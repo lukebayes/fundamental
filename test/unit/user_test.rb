@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/user_test_base'
 
 class UserTest < ActiveSupport::TestCase
 

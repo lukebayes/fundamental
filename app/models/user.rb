@@ -32,7 +32,6 @@ class User < ActiveRecord::Base
     object = OpenIdUser.allocate unless options[:identity_url].blank?
     object ||= SiteUser.allocate
     object.send :initialize, options
-    puts "created new user with: #{object.email}"
     object
   end
 
