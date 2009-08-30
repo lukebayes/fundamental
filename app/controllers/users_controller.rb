@@ -49,7 +49,6 @@ class UsersController < ApplicationController
     self.current_user = (params[:email_verification_code].blank?) ? false : User.find_by_email_verification_code(params[:email_verification_code])
     if logged_in?
       current_user.verify_email!
-      current_user.save!
       flash[:notice] = "Your email address has been verified."
     end
     # TODO: Add support for resending a new code:

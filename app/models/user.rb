@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
   state :deleted, :enter => :on_deleted
 
   event :verify_email do
-    transitions :from => [:passive, :active], :to => :verified, :guard => Proc.new { |u| !u.email.blank? }
+    transitions :from => [:passive, :active], :to => :verified
   end
 
   event :suspend do
@@ -59,6 +59,7 @@ class User < ActiveRecord::Base
   # Public Methods:
   def recently_verified?
     @recently_verified ||= false
+    return @recently_verified && email_verified_at.nil?
   end
 
   def label
