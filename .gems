@@ -1,4 +1,3 @@
-# Set up gem dependencies for Heroku:
 mocha --version '0.9.7'
 ruby-openid --version '2.1.7'
-thoughtbot-shoulda --version '> 2.10.2' --source http://gems.github.com
+thoughtbot-shoulda --version '> 2.10.2' --source 'http://gems.github.com'
