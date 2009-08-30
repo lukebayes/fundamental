@@ -27,6 +27,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   context "An active User" do
+
     setup do
       clear_deliveries
       @user = create_site_user
@@ -74,5 +75,25 @@ class UserTest < ActiveSupport::TestCase
       @user.update_attribute(:email, "123@example.com")
       assert_equal 1, email_deliveries.size
     end
+
+    context "label" do
+
+      should "use first name if provided" do
+        assert_equal 'Quentin', @user.label # Full name is "Quentin T"
+      end
+
+      should "fall back to email alias if no name" do
+        @user.name = nil
+        assert_equal 'quentin', @user.label
+      end
+
+      should "fall back to anonymous if no email or name" do
+        @user.name = nil
+        @user.email = nil
+        assert_equal User::DEFAULT_LABEL, @user.label 
+      end
+
+    end
   end
+
 end

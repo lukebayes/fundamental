@@ -65,7 +65,9 @@ class User < ActiveRecord::Base
   end
 
   def label
-    name || (email.blank?) ? DEFAULT_LABEL : email.split('@').shift
+    return name.split(' ').shift if !name.blank?
+    return email.split('@').shift if !email.blank?
+    return DEFAULT_LABEL
   end
 
   def using_open_id?
