@@ -20,7 +20,7 @@ class UsersControllerTest < ActionController::TestCase
   context "on POST to :create" do
 
     context "with a valid SiteUser" do
-      setup { post :create, :user => site_user_hash }
+      setup { post :create, :site_user => site_user_hash }
 
       should_assign_to :user
       should_respond_with :redirect
@@ -35,7 +35,7 @@ class UsersControllerTest < ActionController::TestCase
     context "with an invalid SiteUser should fail creation because of" do
       [:email, :password, :password_confirmation].each do |field|
         context "nil #{field}" do
-          setup { post :create, :user => site_user_hash(field => nil) }
+          setup { post :create, :site_user => site_user_hash(field => nil) }
           should_render_template :new
           should_set_the_flash_to(/problem/i)
         end
