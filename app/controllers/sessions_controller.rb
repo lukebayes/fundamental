@@ -24,6 +24,6 @@ class SessionsController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "You have been logged out."
-    redirect_to root_path
+    redirect_to new_session_path
   end
 end
