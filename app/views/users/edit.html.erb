@@ -2,15 +2,11 @@
 <%= title "Update Account" %>
 <p class="sub-head"><strong>Update</strong> your account:</p>
 
-<% form_for @user do |f| %>
+<% form_for :user, @user, :url => user_path(@user), :html => {:method => 'put'} do |f| %>
     <%= f.error_messages %>
     <fieldset>
         <legend><%= APP_CONFIG[:site_name] %></legend>
         <ul>
-            <li>
-                <%= f.label 'login', 'Username' %>
-                <%= f.text_field 'login' %>
-            </li>
             <li>
                 <%= f.label 'name', 'Full Name' %>
                 <%= f.text_field 'name' %>
@@ -19,7 +15,7 @@
                 <%= f.label 'email', 'Email' %>
                 <%= f.text_field 'email' %>
             </li>
-            Using open id: <%= @user.using_open_id? %> ---- <%= @user.identity_url %>
+            
             <% if @user.using_open_id? -%>
                 <li>
                     <%= f.label 'identity_url', 'Identity URL' %>

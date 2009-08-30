@@ -1,12 +1,15 @@
 
 class SiteUser < User
+  # Virtual attribute for the password
+  attr_accessor :password, :password_confirmation
 
   # Validations:
-  validates_presence_of     :password, :password_confirmation, :email
-  validates_length_of       :password, :within => 3..40
-  validates_confirmation_of :password
+  validates_presence_of     :email
+  validates_presence_of     :password, :password_confirmation, :if => :password_required?
+  validates_length_of       :password, :within => 3..40, :if => :password_required?
+  validates_confirmation_of :password, :if => :password_required?
 
-  before_save :encrypt_password
+  before_save :encrypt_password, :if => :password_required?
 
   # Event Declarations:
   event :activate do
@@ -27,6 +30,10 @@ class SiteUser < User
   end
 
   protected
+
+  def password_required?
+    (new_record? || (!password_confirmation.blank? || !password.blank?))
+  end
 
   def encrypt_password
     return if password.blank?

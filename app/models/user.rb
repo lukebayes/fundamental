@@ -23,9 +23,6 @@
 class User < ActiveRecord::Base
   DEFAULT_LABEL = 'Anonymous'
 
-  # Virtual attribute for the password
-  attr_accessor :password, :password_confirmation
-  
   # Make new method into a User Factory:
   def self.new(options=nil)
     options ||= {}
@@ -176,9 +173,6 @@ class User < ActiveRecord::Base
   #
   #protected
   #
-  #def password_required?
-  #  !using_open_id? && (crypted_password.blank? || !password.blank?)
-  #end
   #
   #def creating_with_open_id?
   #  using_open_id? && new_record?

@@ -61,6 +61,7 @@ module AuthenticatedSystem
     # to access the requested action.  For example, a popup window might
     # simply close itself.
     def access_denied
+      flash[:warning] = 'You do not have access to the requested resource.'
       respond_to do |format|
         format.html do
           store_location

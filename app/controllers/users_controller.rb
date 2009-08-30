@@ -23,7 +23,7 @@ class UsersController < ApplicationController
       @user = User.new(:identity_url => params[:openid_url])
       create_open_id_user(@user)
     else
-      @user = User.new(params[:site_user])
+      @user = User.new(params[:user])
       if(create_site_user(@user))
         flash[:notice] = 'Your account has been created'
         self.current_user = @user
@@ -37,19 +37,12 @@ class UsersController < ApplicationController
 
   def update
     if @user.update_attributes(params[:user])
-      if(@user.save)
-        #if(!@user.active?)
-        #  update_openid_user(@user, params)
-        #  return
-        #else
-          flash[:notice] = "Your account is now updated."
-          redirect_back_or_default
-          return
-        #end
-      end
+      flash[:notice] = "Your account has been updated."
+      redirect_to root_path
+    else
+      flash[:error] = "There was a problem updating your account."
+      render :action => 'edit', :id => @user
     end
-    # flash[:error] = "There was a problem updating your account"
-    render :action => 'edit', :id => @user
   end
 
   def verify_email

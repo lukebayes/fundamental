@@ -6,7 +6,7 @@ class UsersController; def rescue_action(e) raise e end; end
 
 class UsersControllerTest < ActionController::TestCase
 
-  fixtures :all
+  fixtures :users
 
   context "on GET to :new" do
     setup { get :new }
@@ -20,7 +20,7 @@ class UsersControllerTest < ActionController::TestCase
   context "on POST to :create" do
 
     context "with a valid SiteUser" do
-      setup { post :create, :site_user => site_user_hash }
+      setup { post :create, :user => site_user_hash }
 
       should_assign_to :user
       should_respond_with :redirect
@@ -35,7 +35,7 @@ class UsersControllerTest < ActionController::TestCase
     context "with an invalid SiteUser should fail creation because of" do
       [:email, :password, :password_confirmation].each do |field|
         context "nil #{field}" do
-          setup { post :create, :site_user => site_user_hash(field => nil) }
+          setup { post :create, :user => site_user_hash(field => nil) }
           should_render_template :new
           should_set_the_flash_to(/problem/i)
         end
@@ -44,6 +44,46 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
+  context "on GET to :edit" do
+
+    context "without valid user" do
+      setup { get :edit, {:id => users(:quentin).id} }
+      should_respond_with :redirect
+      should_set_the_flash_to /access/
+    end
+
+    context "with valid user" do
+      setup do
+        login_as :quentin
+        get :edit, {:id => users(:quentin).id}
+      end
+
+      should_assign_to :user
+      should_respond_with :success
+      should_render_template :edit
+      should_not_set_the_flash
+    end
+  end
+
+  context "on PUT to :update" do
+
+    context "without valid authentication" do
+      setup { put :update, :id => users(:quentin).id, :user => {:name => 'New Name'} }
+      should_respond_with :redirect
+      should_set_the_flash_to /access/
+    end
+
+    context "with valid authentication" do
+      setup do
+        login_as :quentin
+        put :update, :id => users(:quentin).id, :user => {:name => 'New Name'}
+      end
+
+      should_respond_with :redirect
+      should_set_the_flash_to /updated/
+    end
+
+  end
 
   #def setup
   #  @controller = UsersController.new

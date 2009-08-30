@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class SiteUserTest < ActiveSupport::TestCase
 
-  subject { SiteUser.first }
+  subject { SiteUser.new }
 
   should_validate_presence_of   :password, :password_confirmation, :email
   should_not_allow_values_for   :password, 'a', 'ab'
@@ -49,6 +49,17 @@ class SiteUserTest < ActiveSupport::TestCase
 
     should "fail to authenticate due to password" do
       assert_nil SiteUser.authenticate(@user.email, 'abc')
+    end
+  end
+
+  context "A verified SiteUser" do
+
+    setup do
+      @user = users(:quentin)
+    end
+
+    should "allow updates without password and password_confirmation" do
+      @user.update_attributes!(:name => 'New Name')
     end
   end
 end

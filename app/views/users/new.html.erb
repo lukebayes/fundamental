@@ -2,7 +2,7 @@
 <%= title "Create Account" %>
 <p class="sub-head"><strong>Create an account</strong> using one of the following:</p>
 
-<% form_for @user do |f| %>
+<% form_for :user, @user, :url => users_path, :html => {:method => 'post'} do |f| %>
     <%= f.error_messages %>
     <%= render :partial => 'shared/openid', :locals => {:label => 'Create'} %>
     <fieldset>
