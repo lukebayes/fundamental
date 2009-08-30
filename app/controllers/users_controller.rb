@@ -150,6 +150,7 @@ class UsersController < ApplicationController
   #  return redirect_to(edit_user_path(@user))
   #end
 
+  
   def failed_creation(user = nil, message = 'Sorry, there was an error creating your account')
     flash[:error] = message
     @user = user || User.new
