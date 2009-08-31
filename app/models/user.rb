@@ -23,13 +23,18 @@
 class User < ActiveRecord::Base
   DEFAULT_LABEL = 'Anonymous'
 
+  # Virtual attribute for the SiteUser password
+  # These need to be available to all users so that
+  # commone forms (like /users/new) don't explode.
+  attr_accessor :password, :password_confirmation
+
   # Make new method into a User Factory:
   def self.new(options=nil)
     options ||= {}
-    object = OpenIdUser.allocate unless options[:identity_url].blank?
-    object ||= SiteUser.allocate
-    object.send :initialize, options
-    object
+    user = OpenIdUser.allocate unless options[:identity_url].blank?
+    user ||= SiteUser.allocate
+    user.send :initialize, options
+    user
   end
 
   # Concrete classes will decide when to validate_presence_of :email

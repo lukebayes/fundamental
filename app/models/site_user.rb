@@ -21,8 +21,6 @@
 #
 
 class SiteUser < User
-  # Virtual attribute for the password
-  attr_accessor :password, :password_confirmation
 
   # Validations:
   validates_presence_of     :email

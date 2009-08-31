@@ -19,7 +19,7 @@
             <% if @user.using_open_id? -%>
                 <li>
                     <%= f.label 'identity_url', 'Identity URL' %>
-                    <%= f.password_field 'identity_url' %>
+                    <%= f.text_field 'identity_url' %>
                 </li>
             <% else -%>
                 <li>

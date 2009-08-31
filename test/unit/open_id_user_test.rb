@@ -21,6 +21,10 @@ class OpenIdUserTest < ActiveSupport::TestCase
       assert @user.valid?
     end
 
+    should "be open_id user" do
+      assert @user.using_open_id?
+    end
+
     context "after activation" do
       setup do
         @user.activate!
