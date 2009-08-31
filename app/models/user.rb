@@ -1,10 +1,9 @@
 # == Schema Information
-# Schema version: 20090810050607
+# Schema version: 20090823223617
 #
 # Table name: users
 #
 #  id                        :integer(4)      not null, primary key
-#  login                     :string(255)
 #  email                     :string(255)
 #  crypted_password          :string(40)
 #  salt                      :string(40)
@@ -12,12 +11,13 @@
 #  updated_at                :datetime
 #  remember_token            :string(255)
 #  remember_token_expires_at :datetime
-#  activation_code           :string(40)
-#  activated_at              :datetime
+#  email_verification_code   :string(40)
+#  email_verified_at         :datetime
 #  state                     :string(255)     default("passive")
 #  deleted_at                :datetime
 #  name                      :string(255)
 #  identity_url              :string(255)
+#  type                      :string(255)
 #
 
 class User < ActiveRecord::Base
@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   # Public Methods:
   def recently_verified?
     @recently_verified ||= false
-    return @recently_verified && email_verified_at.nil?
+    return @recently_verified && !self.email_verified_at.nil?
   end
 
   def label

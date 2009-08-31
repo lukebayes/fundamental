@@ -1,3 +1,25 @@
+# == Schema Information
+# Schema version: 20090823223617
+#
+# Table name: users
+#
+#  id                        :integer(4)      not null, primary key
+#  email                     :string(255)
+#  crypted_password          :string(40)
+#  salt                      :string(40)
+#  created_at                :datetime
+#  updated_at                :datetime
+#  remember_token            :string(255)
+#  remember_token_expires_at :datetime
+#  email_verification_code   :string(40)
+#  email_verified_at         :datetime
+#  state                     :string(255)     default("passive")
+#  deleted_at                :datetime
+#  name                      :string(255)
+#  identity_url              :string(255)
+#  type                      :string(255)
+#
+
 
 class OpenIdUser < User
 

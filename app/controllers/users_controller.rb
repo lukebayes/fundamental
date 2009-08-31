@@ -50,9 +50,10 @@ class UsersController < ApplicationController
     if logged_in?
       current_user.verify_email!
       flash[:notice] = "Your email address has been verified."
+    else
+      # TODO: Add support for resending a new code:
+      flash[:notice] = "We were unable to verify your email with the code provided."
     end
-    # TODO: Add support for resending a new code:
-    flash[:notice] = "We were unable to verify your email with the code provided."
     redirect_back_or_default
   end
 
