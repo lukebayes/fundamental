@@ -51,6 +51,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   context "A verified User" do
+
     setup do
       clear_deliveries
       @user = users(:quentin)

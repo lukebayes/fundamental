@@ -19,10 +19,7 @@ class UsersController < ApplicationController
     # uncomment at your own risk
     # reset_session
 
-    if(!params[:openid_url].blank?)
-      @user = User.new(:identity_url => params[:openid_url])
-      create_open_id_user(@user)
-    else
+    if(params[:openid_url].blank?)
       @user = User.new(params[:user])
       if(create_site_user(@user))
         flash[:notice] = 'Your account has been created'
@@ -32,6 +29,9 @@ class UsersController < ApplicationController
         flash[:error] = 'There was a problem creating your account.'
         render :new
       end
+    else
+      @user = User.new(:identity_url => params[:openid_url])
+      create_open_id_user(@user)
     end
   end
 

@@ -20,7 +20,6 @@
 #  type                      :string(255)
 #
 
-
 class SiteUser < User
   # Virtual attribute for the password
   attr_accessor :password, :password_confirmation
