@@ -16,14 +16,22 @@
                 <%= f.label 'email', 'Email' %>
                 <%= f.text_field 'email' %>
             </li>
-            <li>
-                <%= f.label 'password', 'Password' %>
-                <%= f.password_field 'password' %>
-            </li>
-            <li>
-                <%= f.label 'password_confirmation', 'Confirm Password' %>
-                <%= f.password_field 'password_confirmation' %>
-            </li>
+            <% if @user.using_open_id? -%>
+              <li>
+                  <%= f.label 'identity_url', 'Identity URL' %>
+                  <%= f.text_field 'identity_url' %>
+              </li>
+            <% else -%>
+              <li>
+                  <%= f.label 'password', 'Password' %>
+                  <%= f.password_field 'password' %>
+              </li>
+              <li>
+                  <%= f.label 'password_confirmation', 'Confirm Password' %>
+                  <%= f.password_field 'password_confirmation' %>
+              </li>
+            <% end -%>
+
             <li class="buttons">
                 <%= submit_tag 'Create' %>
             </li>

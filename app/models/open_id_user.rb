@@ -40,7 +40,7 @@ class OpenIdUser < User
   end
 
   def self.authenticate(identity_url)
-    user = OpenIdUser.find_by_identity_url(identity_url)
+    OpenIdUser.find_by_identity_url(identity_url)
   end
 
   def using_open_id?

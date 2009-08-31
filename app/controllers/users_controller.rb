@@ -20,15 +20,7 @@ class UsersController < ApplicationController
     # reset_session
 
     if(!using_open_id?)
-      @user = User.new(params[:user])
-      if(create_site_user(@user))
-        flash[:notice] = 'Your account has been created'
-        self.current_user = @user
-        redirect_back_or_default
-      else
-        flash[:error] = 'There was a problem creating your account.'
-        render :new
-      end
+      create_site_user
     else
       create_open_id_user(params[:openid_url])
     end
@@ -78,14 +70,6 @@ class UsersController < ApplicationController
 
   protected
 
-  def create_site_user(user)
-    return false if !user.valid?
-
-    # TODO: Why do I have to call activate twice?!
-    user.activate!
-    user.activate!
-  end
-
   def find_user
     @user = User.find(params[:id])
   end
@@ -94,15 +78,25 @@ class UsersController < ApplicationController
     (current_user == @user) || access_denied
   end
 
-  #def create_site_user
-  #  if @user.errors.empty?
-  #    flash[:notice] = "Thanks for signing up, please check your email to verify your account."
-  #    self.current_user = @user
-  #    redirect_back_or_default
-  #  else
-  #    render :action => 'new'
-  #  end
-  #end
+  def create_site_user
+    @user = User.new(params[:user])
+    if(activate_site_user(@user))
+      flash[:notice] = 'Your account has been created'
+      self.current_user = @user
+      redirect_back_or_default
+    else
+      flash[:error] = 'There was a problem creating your account.'
+      render :new
+    end
+  end
+
+  def activate_site_user(user)
+    return false if !user.valid?
+
+    # TODO: Why do I have to call activate twice?!
+    user.activate!
+    user.activate!
+  end
 
   def create_open_id_user(identity_url)
     if(open_id_user_exists?(identity_url))
@@ -113,7 +107,6 @@ class UsersController < ApplicationController
     end
 
     authenticate_with_open_id(identity_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
-      puts "inside closure with successful?: #{result.successful?}"
       if result.successful?
         finish_creating_open_id_user get_options_from_open_id_params(params, identity_url) 
       else
@@ -130,14 +123,9 @@ class UsersController < ApplicationController
   def finish_creating_open_id_user(attributes)
     puts "CREATING OPEN ID USER WITH: #{attributes[:identity_url]}"
     @user = User.new(attributes)
-
-    if(@user.save)
-      self.current_user = @user
-      flash[:notice] = "You are now signed in, let's finish creating your account."
-      redirect_to(edit_user_path(@user))
-    else
-      failed_creation(@user, "failed to update new open id user")
-    end
+    @user.save(false)
+    flash[:notice] = "Please finish this last step to complete creating your account."
+    render :action => 'edit'
   end
 
   def failed_creation(user = nil, message = 'There was an error creating your account.')
