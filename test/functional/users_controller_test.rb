@@ -22,6 +22,7 @@ class UsersControllerTest < ActionController::TestCase
     context "with a valid SiteUser" do
       setup { post :create, :user => site_user_hash }
 
+      should_create :user
       should_assign_to :user
       should_respond_with :redirect
 

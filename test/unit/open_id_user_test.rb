@@ -21,18 +21,23 @@ class OpenIdUserTest < ActiveSupport::TestCase
       assert @user.valid?
     end
 
+    should "not be active" do
+      assert !@user.active?
+    end
+
     should "be open_id user" do
       assert @user.using_open_id?
     end
 
     context "after activation" do
+      
       setup do
+        # TODO: Why do I have to call activate! a second time?
+        @user.activate!
         @user.activate!
       end
 
-      # TODO: Why do I have to call activate! a second time?
       should "be active" do
-          @user.activate!
           assert @user.active?
       end
 
@@ -43,27 +48,20 @@ class OpenIdUserTest < ActiveSupport::TestCase
       context "after verification" do
 
         setup do
+          clear_deliveries
           @user.verify_email!
         end
 
-        should "have verified email" do
+        should "be verified" do
           assert @user.verified?
+        end
+
+        should "send confirmation email" do
+          assert_equal 1, ActionMailer::Base.deliveries.size
         end
       end
 
     end
-
-
-    #should "fail to activate if email.nil?" do
-    #  @user = create_open_id_user(:email => nil)
-    #  @user.activate!
-    #  assert_equal :passive.to_s, @user.state
-    #end
-
-
-    #should "be able to authenticate" do
-    #  assert_not_nil OpenIdUser.authenticate(@user.identity_url)
-    #end
 
   end 
 end
