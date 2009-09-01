@@ -48,8 +48,7 @@ class UsersControllerTest < ActionController::TestCase
 
     context "without authenticated user" do
       setup { get :edit, {:id => users(:quentin).id} }
-      should_respond_with :redirect
-      should_set_the_flash_to /access/
+      should_require_login
     end
 
     context "with authenticated user" do
@@ -69,8 +68,7 @@ class UsersControllerTest < ActionController::TestCase
 
     context "without authenticated user" do
       setup { put :update, :id => users(:quentin).id, :user => {:name => 'New Name'} }
-      should_respond_with :redirect
-      should_set_the_flash_to /access/
+      should_require_login
     end
 
     context "with authenticated user" do
