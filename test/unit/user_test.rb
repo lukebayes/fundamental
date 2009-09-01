@@ -76,6 +76,13 @@ class UserTest < ActiveSupport::TestCase
       assert_equal 1, email_deliveries.size
     end
 
+    should "no longer be verified after changing email" do
+      @user.update_attribute(:email, "123@example.com")
+      assert @user.active?, 'user is now only active'
+      @user.verify_email!
+      assert @user.verified?, 'verification still works'
+    end
+
     context "label" do
 
       should "use first name if provided" do

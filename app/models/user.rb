@@ -52,6 +52,10 @@ class User < ActiveRecord::Base
     transitions :from => [:passive, :active], :to => :verified
   end
 
+  event :unverify do
+    transitions :from => :verified, :to => :active
+  end
+
   event :suspend do
     transitions :from => [:passive, :active, :verified], :to => :suspended
   end
@@ -111,6 +115,7 @@ class User < ActiveRecord::Base
   def create_email_verification_code
     self.deleted_at = self.email_verified_at = nil
     self.email_verification_code = ActiveSupport::SecureRandom.hex(6)
+    unverify! if verified?
   end
 
   def on_deleted
