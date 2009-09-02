@@ -28,6 +28,13 @@ class OpenIdUserTest < ActiveSupport::TestCase
       assert @user.using_open_id?
     end
 
+    should "be saveable and retrievable" do
+      @user.save!
+      user = User.find(@user)
+      assert_not_nil user
+      assert user.valid?
+    end
+
     context "after activation" do
       
       setup do

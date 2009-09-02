@@ -29,6 +29,7 @@ class UsersController < ApplicationController
   def update
     if @user.update_attributes(params[:user])
       flash[:notice] = "Your account has been updated."
+      activate_if_passive(@user)
       redirect_to root_path
     else
       flash[:error] = "There was a problem updating your account."
@@ -113,7 +114,7 @@ class UsersController < ApplicationController
         finish_creating_open_id_user get_options_from_open_id_params(params, identity_url) 
       else
         @user = User.new
-        failed_creation(user, result.message || "There was a problem with the OpenID service.")
+        failed_creation(result.message || "There was a problem with the OpenID service.")
       end
     end
   end
@@ -123,7 +124,6 @@ class UsersController < ApplicationController
   end
 
   def finish_creating_open_id_user(attributes)
-    puts "CREATING OPEN ID USER WITH: #{attributes[:identity_url]}"
     @user = User.new(attributes)
     @user.save(false)
     self.current_user = @user
@@ -131,9 +131,15 @@ class UsersController < ApplicationController
     render :action => 'edit'
   end
 
-  def failed_creation(user = nil, message = 'There was an error creating your account.')
+  def failed_creation(message = 'There was an error creating your account.')
     flash[:error] = message
-    @user = user || User.new
     render :action => 'new'
+  end
+
+  def activate_if_passive(user)
+    if(user.passive?)
+      user.activate!
+      user.activate!
+    end
   end
 end

@@ -35,9 +35,8 @@ class SessionsController < ApplicationController
 
   def create_session_from_identity_url(openid_url)
     authenticate_with_open_id(openid_url, :return_to => open_id_complete_url) do |result, identity_url, registration|
-      puts "inside closure with successful?: #{result.successful?}"
       if result.successful?
-        user = User.find_by_identity_url(identity_url)
+        self.current_user = user = OpenIdUser.authenticate(identity_url)
         if(user.nil?)
           flash[:error] = "Unable to find an account with that identity url, did you mean to create a new account instead?"
           redirect_to new_user_path
