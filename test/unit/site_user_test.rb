@@ -10,10 +10,6 @@ class SiteUserTest < ActiveSupport::TestCase
   should_validate_uniqueness_of :email
   should_not_allow_values_for   :email, 'a', 'abcdef', 'a@bcd', 'a@.com'
 
-  setup do
-    ActionMailer::Base.deliveries = []
-  end
-
   context "A new SiteUser" do
 
     setup do

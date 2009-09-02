@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
   context "A new User" do
 
     setup do
-      clear_deliveries
+      ActionMailer::Base.deliveries = []
       @user = create_site_user
     end
 
@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
   context "An active User" do
 
     setup do
-      clear_deliveries
+      ActionMailer::Base.deliveries = []
       @user = create_site_user
       @user.activate!
       # TODO: Why do I need to call activate! twice?
@@ -53,7 +53,7 @@ class UserTest < ActiveSupport::TestCase
   context "A verified User" do
 
     setup do
-      clear_deliveries
+      ActionMailer::Base.deliveries = []
       @user = users(:quentin)
     end
 

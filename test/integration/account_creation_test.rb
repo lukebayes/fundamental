@@ -4,7 +4,7 @@ class AccountCreationTest < ActionController::IntegrationTest
 
   context "An unknown user" do
     setup do
-      clear_deliveries
+      ActionMailer::Base.deliveries = []
     end
 
     should "be redirected to new session path" do
@@ -22,7 +22,7 @@ class AccountCreationTest < ActionController::IntegrationTest
       post users_path, :user => site_user_hash
       assert_redirected_to root_path
       assert_equal 1, email_deliveries.size
-      clear_deliveries
+      ActionMailer::Base.deliveries = []
 
       # Verify Email Address:
       user = User.last

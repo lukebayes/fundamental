@@ -37,6 +37,10 @@ class ActiveSupport::TestCase
   # -- they do not yet inherit this setting
   fixtures :all
 
+  setup do
+    ActionMailer::Base.deliveries = []
+  end
+  
   protected
 
   def create_open_id_user(options = {})
@@ -55,7 +59,6 @@ class ActiveSupport::TestCase
     { :name => 'Quire McMan', :email => 'quire@example.com', :password => 'test', :password_confirmation => 'test' }.merge(options)
   end
 
-  # Add more helper methods to be used by all tests here...
   def stub_open_id_creation(identity_url, successful=true)
     result = {}
     result.expects(:successful?).returns(successful).twice
@@ -69,10 +72,6 @@ class ActiveSupport::TestCase
        :password => 'test',
        :password_confirmation => 'test'
     }.merge(options)
-  end
-
-  def clear_deliveries
-    ActionMailer::Base.deliveries = []
   end
 
   def email_deliveries

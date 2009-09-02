@@ -13,7 +13,6 @@ class OpenIdUserTest < ActiveSupport::TestCase
   context "A valid, new OpenIdUser" do
 
     setup do
-      ActionMailer::Base.deliveries = []
       @user = create_open_id_user
     end
 
@@ -42,13 +41,13 @@ class OpenIdUserTest < ActiveSupport::TestCase
       end
 
       should "send validation email on activation" do
-        assert_equal 1, ActionMailer::Base.deliveries.size
+        assert_equal 1, email_deliveries.size
       end
 
-      context "after verification" do
+      context "and after verification" do
 
         setup do
-          clear_deliveries
+          ActionMailer::Base.deliveries = []
           @user.verify_email!
         end
 
@@ -57,7 +56,7 @@ class OpenIdUserTest < ActiveSupport::TestCase
         end
 
         should "send confirmation email" do
-          assert_equal 1, ActionMailer::Base.deliveries.size
+          assert_equal 1, email_deliveries.size
         end
       end
 

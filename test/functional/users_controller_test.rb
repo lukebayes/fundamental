@@ -43,6 +43,18 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
+    context "with a valid OpenIdUser" do
+      setup do
+        openid_url = 'http://openid.example.com'
+        stub_open_id_creation openid_url
+        post :create, :openid_url => openid_url
+      end
+
+      should_create :user
+      should_assign_to :user
+      should_render_template :edit
+    end
+
   end
 
   context "on GET to :edit" do

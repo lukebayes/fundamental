@@ -98,15 +98,17 @@ class UsersController < ApplicationController
     user.activate!
   end
 
-  def create_open_id_user(identity_url)
-    if(open_id_user_exists?(identity_url))
+  # openid_url is the general target for openid services
+  # identity_url is the user-specific auth url
+  def create_open_id_user(openid_url)
+    if(open_id_user_exists?(openid_url))
       flash[:error] = "We already have an account for that user, please try signing in."
-      # TODO: Just go ahead and log them in...
+      # TODO: Just go ahead and log them in?
       redirect_to new_session_path
       return false
     end
 
-    authenticate_with_open_id(identity_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
+    authenticate_with_open_id(openid_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
       if result.successful?
         finish_creating_open_id_user get_options_from_open_id_params(params, identity_url) 
       else
@@ -124,6 +126,7 @@ class UsersController < ApplicationController
     puts "CREATING OPEN ID USER WITH: #{attributes[:identity_url]}"
     @user = User.new(attributes)
     @user.save(false)
+    self.current_user = @user
     flash[:notice] = "Please finish this last step to complete creating your account."
     render :action => 'edit'
   end
