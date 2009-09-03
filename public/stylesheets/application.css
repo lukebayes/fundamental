@@ -109,7 +109,7 @@ a:visited {
 
 /* === FLASH MESSAGES === */
 div.flash {
-    width: 26.2em;
+    width: 28.5em;
     border: 5px #ccc solid;
     padding: .5em;
     margin-bottom: .6em;
@@ -163,13 +163,23 @@ div.fieldWithErrors textarea
 {
 }
 
-#openid-providers li {
-    float: left;
-    margin-left: .8em;
-    margin-right: .8em;
-    margin-bottom: .6em;
-    width: 150px;
-    height: 50px;
+#openid-providers {
+    padding-top: 1em;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+#openid-providers td {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+#openid-providers td.left {
+    text-align: right;
+}
+
+#openid-providers td.right {
+    text-align: left;
 }
 
 #toggle-any-open-id {
@@ -187,8 +197,9 @@ div.fieldWithErrors textarea
     padding-bottom: 1em;
 }
 
-#any-open-id > div {
-    padding: 1em 1em 0em 0em;
+#any-open-id .content {
+    margin-top: .5em;
+    padding: .5em;
 }
 
 #any-open-id > hr {

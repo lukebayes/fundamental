@@ -1,22 +1,32 @@
 <fieldset>
     <legend>External Service</legend>
-    <ul id="openid-providers">
-      <li>
-        <%= openid_link_for(OPEN_ID_GOOGLE, "google", "#{label} With Google") %>
-      </li>
-      <li>
-        <%= openid_link_for(OPEN_ID_MY_OPEN_ID, "myopenid", "#{label} With My Open ID") %>
-      </li>
-      <li>
-        <%= openid_link_for(OPEN_ID_YAHOO, "yahoo", "#{label} With Yahoo!") %>
-      </li>
-      <li>
-        <%= openid_link_for(OPEN_ID_MYSPACE, 'myspace', "#{label} With MySpace") %>
-      </li>
-      <li>
-        <%= openid_link_for(OPEN_ID_FLICKR, 'flickr', "#{label} With Flickr") %>
-      </li>
-      <li>&nbsp;</li>
+    <table id="openid-providers">
+      <tr>
+        <td class="left">
+          <%= openid_link_for(OPEN_ID_GOOGLE, "google", "#{label} With Google") %>
+        </td>
+        <td class="right">
+          <%= openid_link_for(OPEN_ID_MY_OPEN_ID, "myopenid", "#{label} With My Open ID") %>
+        </td>
+      </tr>
+      <tr>
+        <td class="left">
+          <%= openid_link_for(OPEN_ID_YAHOO, "yahoo", "#{label} With Yahoo!") %>
+        </td>
+        <td class="right">
+          <%= openid_link_for(OPEN_ID_MYSPACE, 'myspace', "#{label} With MySpace") %>
+        </td>
+      </tr>
+      <tr>
+        <td class="left">
+          <%= openid_link_for(OPEN_ID_FLICKR, 'flickr', "#{label} With Flickr") %>
+        </td>
+        <td class="right">
+          &nbsp;
+        </td>
+      </tr>
+
+    </table>
       <!--
       <li>
         <%= openid_link_for(OPEN_ID_FACEBOOK, "facebook", "#{label} With Facebook") %>
@@ -40,15 +50,15 @@
         **<%= openid_link_for(OPEN_ID_AOL, 'aol', "#{label} With America Online") %>
       </li>
       -->
-    </ul>
+  
     <a id="toggle-any-open-id" alt="Toggle display of open id entry form" onclick="toggleOpenIdEntry();">(+) Show OpenID URL entry</a>
+
     <div id="any-open-id" style="display:none;">
       <hr />
-      <div>
+      <div class="content">
         <%= label_tag 'openid_url', 'OpenID URL:' %>
         <%= text_field_tag :openid_url, params[:openid_url] || params['openid.identity'], :html => {:autocomplete => 'off'} %>
-      </div>
-      <div>
+        <br /><br />
         <%= submit_tag "#{label} with OpenID" %>
       </div>
     </div>

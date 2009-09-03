@@ -37,7 +37,7 @@ class UsersController < ApplicationController
   end
 
   def send_verification
-    flash[:notice] = "We have sent an email to #{@user.email}, please check your email and click on the link to verify this address."
+    flash[:notice] = "We have sent an email to #{h(@user.email)}, please check your email and click on the link to verify this address."
     UserMailer.deliver_email_verification(@user)
     redirect_back_or_default
   end
