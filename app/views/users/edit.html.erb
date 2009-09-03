@@ -11,14 +11,15 @@
                 <%= f.label 'name', 'Full Name' %>
                 <%= f.text_field 'name' %>
             </li>
-            <li>
-              <% if !@user.verified? -%>
-                  <span class="verification unverified">(unverified)</span>
-              <% else -%>
-                  <span class="verification">(verified)</span>
-              <% end -%>
+            <% if !@user.verified? -%>
+            <li class="unverified">
+                <span class="verification">(unverified)</span>
+            <% else -%>
+            <li class="verified">
+                <span class="verification">(verified)</span>
+            <% end -%>
                 <%= f.label 'email', 'Email' %>
-                <%= f.text_field 'email' %>
+                <%= f.text_field 'email', :html => {:class => 'verified'} %>
             </li>
             
             <% if @user.using_open_id? -%>

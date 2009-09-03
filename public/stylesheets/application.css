@@ -225,17 +225,24 @@ div.fieldWithErrors textarea
 }
 
 #user-form .verification {
-    font-size: 80%;
+    font-weight: bold;
+    font-size: 85%;
 }
 
-#user-form .unverified {
-    padding: 4px;
+#user-form .unverified .verification {
+    color: #ffcc00;
+}
+
+#user-form .unverified input {
     background-color: #ffcc00;
 }
 
-#user-form .verified {
-    padding: 4px;
-    background-color: #00ff00;
+#user-form .verified .verification {
+    color: #339900;
+}
+
+#user-form .verified input {
+    background-color: #ccffcc;
 }
 
 .send-verification .button-to input {
