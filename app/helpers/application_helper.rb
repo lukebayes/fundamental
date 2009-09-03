@@ -19,7 +19,7 @@ module ApplicationHelper
   end
 
   def openid_link_for(provider_url, name, label)
-    %Q{<input name="commit" type="image" src="/images/openid/#{name.downcase}.png" alt="#{label}" onClick="authenticateWithOpenId('#{provider_url}'); return true;" />}
+    %Q{<input name="commit" type="image" src="/images/openid/#{name.downcase}.png" alt="#{label}" onclick="authenticateWithOpenId('#{provider_url}'); return true;" />}
   end
 
 end
