@@ -257,6 +257,7 @@ table th {
 	-moz-border-radius: ;
 }
 table td {
+    padding: 2px;
 	border-width: 0px;
 	border-style: none;
 	-moz-border-radius: ;

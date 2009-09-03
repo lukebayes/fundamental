@@ -15,12 +15,19 @@
     <body>
         <div id="body-content">
 
-          <table width="100%" id="header">
+          <table width="100%" id="header" cellpadding="0" cellspacing="0">
+            <tr>
+              <td>&nbsp;</td>
+              <td align="right">
+                <% if logged_in? %>
+                    <strong>Welcome <%= current_user.label %></strong><br />
+                <% end %>
+              </td>
+            </tr>
             <tr>
               <td align="left"><%= link_to 'Main', root_path %></td>
               <td align="right">
                 <% if logged_in? %>
-                    <strong>Welcome <%= current_user.label %></strong><br />
                     <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;
                     <%= link_to 'Sign out', logout_path %>
                 <% else %>
