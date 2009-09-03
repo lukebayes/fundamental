@@ -79,7 +79,10 @@ class UsersControllerTest < ActionController::TestCase
 
   context "on POST to :send_verification" do
 
-    should_require_login
+    context "without authenticated user" do
+      setup { post :send_verification, :id => users(:quentin).id }
+      should_require_login
+    end
 
     context "with authenticated user" do
       setup { login_as :quentin }
