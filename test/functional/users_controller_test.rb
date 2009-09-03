@@ -77,6 +77,21 @@ class UsersControllerTest < ActionController::TestCase
     end
   end
 
+  context "on POST to :send_verification" do
+
+    should_require_login
+
+    context "with authenticated user" do
+      setup { login_as :quentin }
+
+      should "send email" do
+        post :send_verification, :id => users(:quentin).id
+        assert_equal 1, email_deliveries.size
+      end
+    end
+
+  end
+
   context "on PUT to :update" do
 
     context "without authenticated user" do

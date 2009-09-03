@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :users,         :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
+  map.resources :users,         :member => { :suspend => :put, :unsuspend => :put, :purge => :delete, :send_verification => :post }
   map.resources :site_users,    :controller => 'users', :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
   map.resources :open_id_users, :controller => 'users', :member => { :suspend => :put, :unsuspend => :put, :purge => :delete }
 

@@ -2,8 +2,8 @@ class UsersController < ApplicationController
   include UsersHelper
   
   before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
-  before_filter :find_user, :only => [:edit, :update, :suspend, :unsuspend, :destroy, :purge]
-  before_filter :authorized?, :only => [:edit, :update]
+  before_filter :find_user, :only => [:edit, :update, :suspend, :unsuspend, :destroy, :purge, :send_verification]
+  before_filter :authorized?, :only => [:edit, :update, :send_verification]
 
   def new
     @user = User.new
@@ -32,9 +32,14 @@ class UsersController < ApplicationController
       activate_if_passive(@user)
       redirect_to root_path
     else
-      flash[:error] = "There was a problem updating your account."
       render :action => 'edit', :id => @user
     end
+  end
+
+  def send_verification
+    flash[:notice] = "We have sent an email to #{@user.email}, please check your email and click on the link to verify this address."
+    UserMailer.deliver_email_verification(@user)
+    redirect_back_or_default
   end
 
   def verify_email

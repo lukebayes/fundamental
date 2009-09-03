@@ -24,29 +24,20 @@ body {
     overflow-y: scroll;
 }
 
-#body-content > div {
-    margin: 1em auto;
+#body-content {
+    margin: 0px auto;
     width: 780px;
     padding: 1em;
 }
 
-#body-content > #main {
-    background-color: #fff;
-}
-
-#body-content > #header {
-    text-align: right;
-}
-
-#body-content > #main {
+#main {
+    background-color: #ffffff;
+    padding: 1em;
     text-align: left;
+    margin-bottom: 10px;
 }
 
-#header > .left {
-    float: left;
-}
-
-div#footer {
+#footer {
     font-size: 80%;
     text-align: center;
     background-color: #e3e1db;
@@ -64,7 +55,7 @@ div#footer {
 
 form {
     margin-top: 1em;
-    width: 28em;
+    width: 30em;
 }
 
 form ul, form li {
@@ -222,10 +213,51 @@ div.fieldWithErrors textarea
     cursor: pointer;
 }
 
+#user-form .verification {
+    font-size: 80%;
+}
+
+#user-form .unverified {
+    padding: 4px;
+    background-color: #ffcc00;
+}
+
+.send-verification .button-to input {
+    cursor: pointer;
+    background: none;
+    border: 0px;
+    color: #0000ff;
+    font-size: 80%;
+    text-decoration: underline;
+}
+
+.send-verification .button-to input:hover {
+    color: #ff0000;
+}
+
+#user-form .active {
+}
+
 .smaller {
     font-size: 90%;
 }
 
 .password-reminder {
     margin-right: 0.7em;
+}
+
+table {
+	border-width: 0px;
+	border-style: none;
+	border-collapse: separate;
+}
+table th {
+	border-width: 0px;
+	border-style: none;
+	-moz-border-radius: ;
+}
+table td {
+	border-width: 0px;
+	border-style: none;
+	-moz-border-radius: ;
 }

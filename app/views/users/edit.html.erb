@@ -2,7 +2,7 @@
 <%= title "Update Account" %>
 <p class="sub-head"><strong>Update</strong> your account:</p>
 
-<% form_for :user, @user, :url => user_path(@user), :html => {:method => 'put'} do |f| %>
+<% form_for :user, @user, :url => user_path(@user), :html => {:method => 'put', :id => 'user-form'} do |f| %>
     <%= f.error_messages %>
     <fieldset>
         <legend><%= APP_CONFIG[:site_name] %></legend>
@@ -12,6 +12,11 @@
                 <%= f.text_field 'name' %>
             </li>
             <li>
+              <% if !@user.verified? -%>
+                  <span class="verification unverified">(unverified)</span>
+              <% else -%>
+                  <span class="verification">(verified)</span>
+              <% end -%>
                 <%= f.label 'email', 'Email' %>
                 <%= f.text_field 'email' %>
             </li>
@@ -31,9 +36,17 @@
                     <%= f.password_field 'password_confirmation' %>
                 </li>
             <% end -%>
+
             <li class="buttons">
                 <%= submit_tag 'Update' %>
             </li>
         </ul>
     </fieldset>
 <% end %>
+
+<% if !@user.verified? -%>
+    <li>
+        <div class="send-verification"><%= button_to 'Send verification email', send_verification_user_path(@user) %></div>
+    </li>
+<% end -%>
+

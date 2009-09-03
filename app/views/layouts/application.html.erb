@@ -14,40 +14,45 @@
     </head>
     <body>
         <div id="body-content">
-            <div id="header">
-                <span class="left">
-                    <%= link_to 'Main', root_path %>
-                </span>
-                <span>
-                    <% if logged_in? %>
-                        <strong>Welcome <%= current_user.label %></strong><br />
-                        <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;
-                        <%= link_to 'Sign out', logout_path %>
-                    <% else %>
-                        <%= link_to 'Sign in', new_session_path %> or
-                        <%= link_to 'Create an account', new_user_path%>
-                    <% end %>
-                </span>
-            </div>
-            <div id="main">
-                <%= flash_messages %>
-                <%= yield :layout %>
-            </div>
-            <div id="footer">
-              <ul>
-                <li><%= link_to 'About', about_path %></li>
-                <li><%= link_to 'Contact', contact_path %></li>
-                <li><%= link_to 'Privacy', privacy_path %></li>
-              </ul>
-              <br />
-              <br />
-              <ul>
-                <li><a href="http://github.com/lukebayes/fundamental" target="_blank">GitHub</a></li>
-                <li><a href="http://fundamental.heroku.com" target="_blank">Heroku</a></li>
-                <li><a href="http://runcoderun.com/lukebayes/fundamental" target="_blank">Run Code Run</a></li>
-                <li><a href="http://www.pivotaltracker.com/projects/24964" target="_blank">Pivotal Tracker</a></li>
-              </ul>
-            </div>
+
+          <table width="100%" id="header">
+            <tr>
+              <td align="left"><%= link_to 'Main', root_path %></td>
+              <td align="right">
+                <% if logged_in? %>
+                    <strong>Welcome <%= current_user.label %></strong><br />
+                    <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;
+                    <%= link_to 'Sign out', logout_path %>
+                <% else %>
+                    <%= link_to 'Sign in', new_session_path %> or
+                    <%= link_to 'Create an account', new_user_path%>
+                <% end %>
+              </td>
+            </tr>
+          </table>
+
+          <div id="main">
+              <%= flash_messages %>
+              <%= yield :layout %>
+          </div>
+
+          <table width="100%" id="footer">
+            <tr>
+              <td>
+                <%= link_to 'About', about_path %>
+                <%= link_to 'Contact', contact_path %>
+                <%= link_to 'Privacy', privacy_path %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <a href="http://github.com/lukebayes/fundamental" target="_blank">GitHub</a>
+                <a href="http://fundamental.heroku.com" target="_blank">Heroku</a>
+                <a href="http://runcoderun.com/lukebayes/fundamental" target="_blank">Run Code Run</a>
+                <a href="http://www.pivotaltracker.com/projects/24964" target="_blank">Pivotal Tracker</a>
+              </td>
+            </tr>
+          </table>
         </div>
     </body>
 </html>
