@@ -10,6 +10,7 @@ module AuthenticatedSystem
     # Future calls avoid the database because nil is not equal to false.
     def current_user
       @current_user ||= (login_from_session || login_from_cookie) unless @current_user == false
+      # Switch commented line to use basic auth:
       #@current_user ||= (login_from_session || login_from_basic_auth || login_from_cookie) unless @current_user == false
     end
 
@@ -68,9 +69,10 @@ module AuthenticatedSystem
           store_location
           redirect_to new_session_path
         end
-        format.any do
-          request_http_basic_authentication 'Web Password'
-        end
+        # Uncomment to use Basic Auth:
+        #format.any do
+        #  request_http_basic_authentication 'Web Password'
+        #end
       end
     end
 

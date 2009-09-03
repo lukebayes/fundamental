@@ -233,6 +233,11 @@ div.fieldWithErrors textarea
     background-color: #ffcc00;
 }
 
+#user-form .verified {
+    padding: 4px;
+    background-color: #00ff00;
+}
+
 .send-verification .button-to input {
     cursor: pointer;
     background: none;
