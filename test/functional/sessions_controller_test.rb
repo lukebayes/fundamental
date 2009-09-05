@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'sessions_controller'
 
 # Re-raise errors caught by the controller.
 class SessionsController; def rescue_action(e) raise e end; end
@@ -8,69 +7,82 @@ class SessionsControllerTest < ActionController::TestCase
 
   fixtures :users
 
-  def setup
-    @controller = SessionsController.new
-    @request    = ActionController::TestRequest.new
-    @response   = ActionController::TestResponse.new
+  context "POST to :create" do
+
+    context "with known user" do
+      setup { @user = users(:quentin) }
+
+      should "authenticate with valid SiteUser credentials" do
+        post :create, :email => @user.email, :password => 'test'
+        assert_equal @user.id, session[:user_id]
+        assert_nil flash[:error]
+        assert_response :redirect
+      end
+
+      should "not authenticate with bad password" do
+        post :create, :email => @user.email, :password => 'bad password'
+        assert_nil session[:user_id]
+        assert_not_nil flash[:error]
+        assert_response :success
+      end
+
+      should "remember me" do
+        post :create, :email => @user.email, :password => 'test', :remember_me => '1'
+        assert_not_nil @response.cookies["auth_token"]
+      end
+
+      should "not remember me" do
+        post :create, :email => @user.email, :password => 'test', :remember_me => '0'
+        assert_nil @response.cookies['auth_token']
+      end
+
+    end
+
   end
 
-  def test_should_email_and_redirect
-    post :create, :email => 'quentin@example.com', :password => 'test'
-    assert session[:user_id]
-    assert_nil flash[:error]
-    assert_response :redirect
+  context "GET to :destroy" do
+
+    should "logout" do
+      login_as :quentin
+      get :destroy
+      assert_nil session[:user_id]
+      assert_response :redirect
+    end
+
+    should "delete token on logout" do
+      login_as :quentin
+      delete :destroy
+      assert_nil @response.cookies['auth_token']
+    end
+
   end
 
-  def test_should_fail_login_and_not_redirect
-    post :create, :email => 'quentin@example.com', :password => 'bad password'
-    assert_nil session[:user_id]
-    assert_not_nil flash[:error]
-    assert_response :success
-  end
+  context "GET to :new" do
 
-  def test_should_logout
-    login_as :quentin
-    get :destroy
-    assert_nil session[:user_id]
-    assert_response :redirect
-  end
+    setup do
+      @user = users(:quentin)
+    end
 
-  def test_should_remember_me
-    post :create, :email => 'quentin@example.com', :password => 'test', :remember_me => "1"
-    assert_not_nil @response.cookies["auth_token"]
-  end
+    should "login with cookie" do
+      @user.remember_me
+      @request.cookies['auth_token'] = cookie_for(:quentin)
+      get :new
+      assert @controller.send(:logged_in?)
+    end
 
-  def test_should_not_remember_me
-    post :create, :email => 'quentin@example.com', :password => 'test', :remember_me => "0"
-    assert_nil @response.cookies["auth_token"]
-  end
-  
-  def test_should_delete_token_on_logout
-    login_as :quentin
-    delete :destroy
-    assert_equal nil, @response.cookies["auth_token"]
-  end
+    should "not login with expired cookie" do
+      @user.remember_me
+      @user.update_attribute :remember_token_expires_at, 5.minutes.ago
+      get :new
+      assert !@controller.send(:logged_in?)
+    end
 
-  def test_should_login_with_cookie
-    users(:quentin).remember_me
-    @request.cookies["auth_token"] = cookie_for(:quentin)
-    get :new
-    assert @controller.send(:logged_in?)
-  end
-
-  def test_should_fail_expired_cookie_login
-    users(:quentin).remember_me
-    users(:quentin).update_attribute :remember_token_expires_at, 5.minutes.ago
-    #@request.cookies["auth_token"] = cookie_for(:quentin)
-    get :new
-    assert !@controller.send(:logged_in?)
-  end
-
-  def test_should_fail_cookie_login
-    users(:quentin).remember_me
-    @request.cookies["auth_token"] = auth_token('invalid_auth_token')
-    get :new
-    assert !@controller.send(:logged_in?)
+    should "no login with invalid cookie" do
+      @user.remember_me
+      @request.cookies['auth_token'] = auth_token('invalid_auth_token')
+      get :new
+      assert !@controller.send(:logged_in?)
+    end
   end
 
   protected
