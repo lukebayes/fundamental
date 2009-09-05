@@ -102,6 +102,10 @@ class User < ActiveRecord::Base
     save(false)
   end
 
+  def admin?
+    return false
+  end
+
   protected
 
   def blank_email?

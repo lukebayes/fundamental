@@ -1,45 +1,62 @@
-require 'test_helper'
+require File.dirname(__FILE__) + '/../../test_helper'
 
 class Admin::UsersControllerTest < ActionController::TestCase
-  test "should get index" do
-    get :index
-    assert_response :success
-    assert_not_nil assigns(:admin_users)
-  end
 
-  test "should get new" do
-    get :new
-    assert_response :success
-  end
+  context "GET to :index" do
 
-  test "should create user" do
-    assert_difference('Admin::User.count') do
-      post :create, :user => { }
+    context "fails with no user" do
+      setup { get :index }
+      should_require_login
     end
 
-    assert_redirected_to user_path(assigns(:user))
-  end
-
-  test "should show user" do
-    get :show, :id => admin_users(:one).to_param
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get :edit, :id => admin_users(:one).to_param
-    assert_response :success
-  end
-
-  test "should update user" do
-    put :update, :id => admin_users(:one).to_param, :user => { }
-    assert_redirected_to user_path(assigns(:user))
-  end
-
-  test "should destroy user" do
-    assert_difference('Admin::User.count', -1) do
-      delete :destroy, :id => admin_users(:one).to_param
+    context "fails with non-admin user" do
+      setup do
+        login_as :quentin
+        should_require_login
+      end
     end
 
-    assert_redirected_to admin_users_path
   end
+
+  #test "should get index" do
+  #  get :index
+  #  assert_response :success
+  #  assert_not_nil assigns(:admin_users)
+  #end
+  #
+  #test "should get new" do
+  #  get :new
+  #  assert_response :success
+  #end
+  #
+  #test "should create user" do
+  #  assert_difference('Admin::User.count') do
+  #    post :create, :user => { }
+  #  end
+  #
+  #  assert_redirected_to user_path(assigns(:user))
+  #end
+  #
+  #test "should show user" do
+  #  get :show, :id => admin_users(:one).to_param
+  #  assert_response :success
+  #end
+  #
+  #test "should get edit" do
+  #  get :edit, :id => admin_users(:one).to_param
+  #  assert_response :success
+  #end
+  #
+  #test "should update user" do
+  #  put :update, :id => admin_users(:one).to_param, :user => { }
+  #  assert_redirected_to user_path(assigns(:user))
+  #end
+  #
+  #test "should destroy user" do
+  #  assert_difference('Admin::User.count', -1) do
+  #    delete :destroy, :id => admin_users(:one).to_param
+  #  end
+  #
+  #  assert_redirected_to admin_users_path
+  #end
 end
