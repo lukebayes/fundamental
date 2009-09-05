@@ -128,18 +128,22 @@ class UsersControllerTest < ActionController::TestCase
 
   end
 
-  #def test_should_verify_email
-  #  aaron = users(:aaron)
-  #  assert !aaron.verified?, "Aaron should not be verified"
-  #  get :verify_email, :email_verification_code => aaron.email_verification_code
-  #  assert_not_nil flash[:notice]
-  #  assert_redirected_to root_path
-  #  #assert aaron.verified?, "Aaron should now be verified"
-  #end
-  #
-  #def test_should_not_verify_with_blank_key
-  #  assert_no_difference 'ActionMailer::Base.deliveries.size' do
-  #    get :verify_email, :email_verification_code => ''
-  #  end
-  #end
+  context "on GET to :verify_email" do
+
+    context "with valid unverified user" do
+      setup do
+        post :create, :user => site_user_hash
+        assert User.last.active?
+        get :verify_email, :email_verification_code => User.last.email_verification_code
+      end
+
+      should "send verification email" do
+        user = User.last
+        assert_equal 2, email_deliveries.size
+        assert user.verified?
+        assert_nil user.email_verification_code
+      end
+    end
+    
+  end
 end
