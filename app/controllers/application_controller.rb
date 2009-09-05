@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def admin_required
-    if(!current_user || !current_user.admin?)
+    if(!current_user || !current_user.admin_role?)
       access_denied
     end
   end

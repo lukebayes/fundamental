@@ -1,0 +1,12 @@
+
+admin:
+  name: admin
+  label: Administrator
+
+web:
+  name: web
+  label: Web User
+
+api:
+  name: api
+  label: API User

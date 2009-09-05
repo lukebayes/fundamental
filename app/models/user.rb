@@ -23,6 +23,8 @@
 class User < ActiveRecord::Base
   DEFAULT_LABEL = 'Anonymous'
 
+  has_and_belongs_to_many :roles
+
   # Virtual attribute for the SiteUser password
   # These need to be available to all users so that
   # commone forms (like /users/new) don't explode.
@@ -41,8 +43,11 @@ class User < ActiveRecord::Base
   validates_length_of       :email, :within => 3..254, :unless => :blank_email?
   validates_uniqueness_of   :email, :case_sensitive => false, :unless => :blank_email?
   validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :unless => :blank_email?
-  
+
+  before_create :add_web_role
+
   before_save :create_email_verification_code, :if => :email_changed?
+  after_save :trigger_emails
 
   # State Machine Configuration:
   acts_as_state_machine :initial => :passive
@@ -102,11 +107,35 @@ class User < ActiveRecord::Base
     save(false)
   end
 
-  def admin?
-    return false
+  def admin_role?
+    has_role 'admin'
+  end
+
+  def web_role?
+    has_role 'web'
+  end
+
+  def api_role?
+    has_role 'api'
   end
 
   protected
+
+  def add_web_role
+    self.roles << Role.web unless self.web_role?
+  end
+
+  def trigger_emails
+    if(recently_verified?)
+      UserMailer.deliver_email_confirmation(self)
+    elsif(email_changed? && !email.blank?)
+      UserMailer.deliver_email_verification(self)
+    end
+  end
+  
+  def has_role(name)
+    !roles.detect { |role| role.name == name }.nil?
+  end
 
   def blank_email?
     email.blank?

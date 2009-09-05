@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
-  fixtures :users
+  fixtures :users, :roles, :roles_users
   
   context "A new User" do
 
@@ -22,6 +22,12 @@ class UserTest < ActiveSupport::TestCase
       # One to acknowledge email verification from verify_email!
       # NOT a third from second call to save!
       assert_equal 1, email_deliveries.size
+    end
+
+    should "have the web role" do
+      @user.save!
+      assert @user.web_role?
+      assert !@user.admin_role?
     end
   end
 
