@@ -32,7 +32,7 @@ class UsersController < ApplicationController
       activate_if_passive(@user)
       redirect_to root_path
     else
-      render :action => 'edit', :id => @user
+      render :action => 'edit'
     end
   end
 
@@ -129,8 +129,7 @@ class UsersController < ApplicationController
   end
 
   def finish_creating_open_id_user(attributes)
-    @user = User.new(attributes)
-    @user.save(false)
+    @user = User.create(attributes)
     self.current_user = @user
     flash[:notice] = "Please finish this last step to complete creating your account."
     render :action => 'edit'

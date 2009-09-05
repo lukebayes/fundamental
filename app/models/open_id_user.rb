@@ -26,17 +26,14 @@ class OpenIdUser < User
   # Validations:
   validates_presence_of :identity_url
   validates_uniqueness_of :identity_url
-  validates_presence_of :email, :if => :recently_activated?
-
-  # State Declarations:
-  state :active, :enter => :on_activated
+  validates_presence_of :email, :unless => :passive?
 
   # Accessible Attributes:
   attr_accessible :identity_url, :email, :name
 
   # Event Declarations:
   event :activate do
-    transitions :from => :passive, :to => :active, :guard => Proc.new { |u| u.valid? }
+    transitions :from => :passive, :to => :active, :guard => Proc.new { |u| !u.email.blank? }
   end
 
   def self.authenticate(identity_url)
@@ -46,15 +43,4 @@ class OpenIdUser < User
   def using_open_id?
     true
   end
-
-  protected
-
-  def on_activated
-    @recently_activated = true
-  end
-
-  def recently_activated?
-    return @recently_activated || false
-  end
-
 end

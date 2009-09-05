@@ -2,13 +2,26 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class OpenIdUserTest < ActiveSupport::TestCase
 
+  # Without this line, attempts to validate presence of identity_url
+  # fail, because new users are created as SiteUsers
   subject { create_open_id_user }
 
   should_validate_presence_of   :identity_url
-  should_not_allow_values_for   :email, 'a', 'abcdef', 'a@bcd', 'a@.com'
 
-  # This test interacts with presence test and STI with nil values:
-  #should_validate_uniqueness_of :identity_url
+  context "An incomplete new OpenIdUser" do
+
+    setup do
+      @user = create_open_id_user(:email => nil, :name => nil)
+    end
+
+    should "be passive" do
+      assert @user.passive?
+    end
+
+    should "be valid" do
+      assert @user.valid?
+    end
+  end
 
   context "A valid, new OpenIdUser" do
 
@@ -42,6 +55,9 @@ class OpenIdUserTest < ActiveSupport::TestCase
         @user.activate!
         @user.activate!
       end
+
+      should_validate_presence_of   :identity_url
+      should_not_allow_values_for   :email, 'a', 'abcdef', 'a@bcd', 'a@.com'
 
       should "be active" do
           assert @user.active?

@@ -38,9 +38,9 @@ class User < ActiveRecord::Base
   end
 
   # Concrete classes will decide when to validate_presence_of :email
-  validates_length_of       :email, :within => 3..254
-  validates_uniqueness_of   :email, :case_sensitive => false
-  validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+  validates_length_of       :email, :within => 3..254, :unless => :blank_email?
+  validates_uniqueness_of   :email, :case_sensitive => false, :unless => :blank_email?
+  validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :unless => :blank_email?
   
   before_save :create_email_verification_code, :if => :email_changed?
 
@@ -103,6 +103,10 @@ class User < ActiveRecord::Base
   end
 
   protected
+
+  def blank_email?
+    email.blank?
+  end
 
   def on_verified
     @recently_verified = true
