@@ -1,29 +1,30 @@
 <%= title "Sign In" %>
-<p class="sub-head"><strong>Sign in</strong> using one of the following:</p>
+<div class="user">
+  <p class="sub-head"><strong>Sign in</strong> using one of the following:</p>
 
-<% form_tag session_path do %>
+  <%= render :partial => 'shared/openid', :locals => {:submit_path => session_path, :label => 'Sign in'} %>
 
-    <%= render :partial => 'shared/openid', :locals => {:label => 'Sign in'} %>
-
-    <fieldset>
-        <legend><%= APP_CONFIG[:site_name] %></legend>
-        <ul>
-            <li>
-                <%= label_tag 'email', 'Email' %>
-                <%= text_field_tag 'email', @email %>
-            </li>
-            <li>
-                <%= label_tag 'password', 'Password' %>
-                <%= password_field_tag 'password' %>
-            </li>
-            <li class="checkbox">
-                <%= label_tag 'remember_me', 'Remember me' %>
-                <%= check_box_tag 'remember_me', '1', @remember_me %>
-            </li>
-            <li class="buttons">
-                <% # link_to 'Password reminder', forgot_password_path, :class => 'smaller password-reminder', :tabindex => 100 %>
-              <%= submit_tag 'Sign In', :onclick => 'clearOpenId();' %>
-            </li>
-        </ul>
-    </fieldset>
-<% end -%>
+  <% form_tag session_path do %>
+      <fieldset>
+          <legend><%= APP_CONFIG[:site_name] %></legend>
+          <ul>
+              <li>
+                  <%= label_tag 'email', 'Email' %>
+                  <%= text_field_tag 'email', @email %>
+              </li>
+              <li>
+                  <%= label_tag 'password', 'Password' %>
+                  <%= password_field_tag 'password' %>
+              </li>
+              <li class="checkbox">
+                  <%= label_tag 'remember_me', 'Remember me' %>
+                  <%= check_box_tag 'remember_me', '1', @remember_me %>
+              </li>
+              <li class="buttons">
+                  <% # link_to 'Password reminder', forgot_password_path, :class => 'smaller password-reminder', :tabindex => 100 %>
+                <%= submit_tag 'Sign In' %>
+              </li>
+          </ul>
+      </fieldset>
+  <% end -%>
+</div>

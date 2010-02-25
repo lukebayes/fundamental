@@ -31,6 +31,26 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  context "With failing email services" do
+    setup do
+      UserMailer.stubs(:deliver_email_verification).raises(SocketError.new('stub socket error'))
+    end
+
+    context "a new user" do
+
+      setup do
+        @user = create_site_user
+      end
+
+      should "still be activated" do
+        assert_difference('User.count') do
+          @user.activate!
+        end
+      end
+    end
+
+  end
+
   context "An active User" do
 
     setup do

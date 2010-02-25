@@ -44,10 +44,11 @@ class User < ActiveRecord::Base
   validates_uniqueness_of   :email, :case_sensitive => false, :unless => :blank_email?
   validates_format_of       :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :unless => :blank_email?
 
-  before_create :add_web_role
+  before_create :add_default_roles
 
   before_save :create_email_verification_code, :if => :email_changed?
-  after_save :trigger_emails
+  after_save :trigger_email_verification, :if => :email_changed?
+  after_save :trigger_email_confirmation, :if => :recently_verified?
 
   # State Machine Configuration:
   acts_as_state_machine :initial => :passive
@@ -121,18 +122,39 @@ class User < ActiveRecord::Base
 
   protected
 
+  def add_default_roles
+    add_web_role
+    if(email == APP_CONFIG[:admin_email])
+      add_admin_role
+    end
+  end
+
   def add_web_role
     self.roles << Role.web unless self.web_role?
   end
 
-  def trigger_emails
-    if(recently_verified?)
-      UserMailer.deliver_email_confirmation(self)
-    elsif(email_changed? && !email.blank?)
+  def add_admin_role
+    self.roles << Role.web unless self.admin_role?
+  end
+
+  def trigger_email_confirmation
+    UserMailer.deliver_email_confirmation(self)
+  end
+
+  def trigger_email_verification
+    if(!email.blank?)
       UserMailer.deliver_email_verification(self)
     end
+  rescue SocketError => e
+    logger.error e
   end
-  
+
+  def trigger_emails
+    if(recently_verified?)
+    elsif(email_changed? && !email.blank?)
+    end
+  end
+
   def has_role(name)
     !roles.detect { |role| role.name == name }.nil?
   end

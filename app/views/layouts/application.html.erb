@@ -25,7 +25,12 @@
               </td>
             </tr>
             <tr>
-              <td align="left"><%= link_to 'Main', root_path %></td>
+              <td align="left">
+                <%= link_to 'Main', root_path %>
+                <% if logged_in? && current_user.admin_role? -%>
+                    <%= link_to 'Admin', admin_users_path %>
+                <% end -%>
+              </td>
               <td align="right">
                 <% if logged_in? %>
                     <%= link_to 'Account', edit_user_path(current_user) %>&nbsp;&nbsp;

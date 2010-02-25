@@ -117,7 +117,7 @@ module OpenIdAuthentication
     # because that's what the specification dictates in order to get browser auto-complete working across sites
     def using_open_id?(identity_url = nil) #:doc:
       identity_url ||= params[:openid_identifier] || params[:openid_url]
-      !identity_url.blank? || params[:open_id_complete]
+      !identity_url.blank? || !params[:open_id_complete].nil?
     end
 
     def authenticate_with_open_id(identity_url = nil, options = {}, &block) #:doc:

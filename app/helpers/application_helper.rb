@@ -18,8 +18,8 @@ module ApplicationHelper
     messages
   end
 
-  def openid_link_for(provider_url, name, label)
-    %Q{<input name="commit" type="image" src="/images/openid/#{name.downcase}.png" alt="#{label}" onclick="authenticateWithOpenId('#{provider_url}'); return true;" />}
+  def openid_link_for(submit_path, provider_url, name, label)
+    render :partial => 'shared/openid_provider', :locals => { :submit_path => submit_path, :provider_url => provider_url, :name => name, :label => label }
   end
 
 end

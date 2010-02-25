@@ -45,7 +45,7 @@ class SessionsController < ApplicationController
           redirect_back_or_default
         end
       else
-        flash[:error] = "Open ID authentication failed."
+        flash[:error] = result.message || "Open ID authentication failed."
         redirect_to new_session_path
       end
     end

@@ -3,23 +3,23 @@
     <table id="openid-providers">
       <tr>
         <td class="left">
-          <%= openid_link_for(OPEN_ID_GOOGLE, "google", "#{label} With Google") %>
+          <%= openid_link_for(submit_path, OPEN_ID_GOOGLE, "google", "#{label} With Google") %>
         </td>
         <td class="right">
-          <%= openid_link_for(OPEN_ID_MY_OPEN_ID, "myopenid", "#{label} With My Open ID") %>
+          <%= openid_link_for(submit_path, OPEN_ID_MY_OPEN_ID, "myopenid", "#{label} With My Open ID") %>
         </td>
       </tr>
       <tr>
         <td class="left">
-          <%= openid_link_for(OPEN_ID_YAHOO, "yahoo", "#{label} With Yahoo!") %>
+          <%= openid_link_for(submit_path, OPEN_ID_YAHOO, "yahoo", "#{label} With Yahoo!") %>
         </td>
         <td class="right">
-          <%= openid_link_for(OPEN_ID_MYSPACE, 'myspace', "#{label} With MySpace") %>
+          <%= openid_link_for(submit_path, OPEN_ID_MYSPACE, 'myspace', "#{label} With MySpace") %>
         </td>
       </tr>
       <tr>
         <td class="left">
-          <%= openid_link_for(OPEN_ID_FLICKR, 'flickr', "#{label} With Flickr") %>
+          <%= openid_link_for(submit_path, OPEN_ID_FLICKR, 'flickr', "#{label} With Flickr") %>
         </td>
         <td class="right">
           &nbsp;
@@ -29,25 +29,25 @@
     </table>
       <!--
       <li>
-        <%= openid_link_for(OPEN_ID_FACEBOOK, "facebook", "#{label} With Facebook") %>
+        <%= openid_link_for(submit_path, OPEN_ID_FACEBOOK, "facebook", "#{label} With Facebook") %>
       </li>
       <li>
-        **<%= openid_link_for(OPEN_ID_TWITTER, 'twitter', "#{label} With Twitter") %>
+        **<%= openid_link_for(submit_path, OPEN_ID_TWITTER, 'twitter', "#{label} With Twitter") %>
       </li>
       <li>
-        **<%= openid_link_for(OPEN_ID_LIVE_JOURNAL, 'livejournal', "#{label} With Live Journal") %>
+        **<%= openid_link_for(submit_path, OPEN_ID_LIVE_JOURNAL, 'livejournal', "#{label} With Live Journal") %>
       </li>
       <li>
-        **<%= openid_link_for(OPEN_ID_WORDPRESS, 'wordpress', "#{label} With Word Press") %>
+        **<%= openid_link_for(submit_path, OPEN_ID_WORDPRESS, 'wordpress', "#{label} With Word Press") %>
       </li>
       <li>
-        **<%= openid_link_for(OPEN_ID_BLOGGER, 'blogger', "#{label} With Blogger") %>
+        **<%= openid_link_for(submit_path, OPEN_ID_BLOGGER, 'blogger', "#{label} With Blogger") %>
       </li>
       <li>
-        **<%= openid_link_for(OPEN_ID_MICROSOFT, 'microsoft', "#{label} With Windows Live!") %>
+        **<%= openid_link_for(submit_path, OPEN_ID_MICROSOFT, 'microsoft', "#{label} With Windows Live!") %>
       </li>
       <li>
-        **<%= openid_link_for(OPEN_ID_AOL, 'aol', "#{label} With America Online") %>
+        **<%= openid_link_for(submit_path, OPEN_ID_AOL, 'aol', "#{label} With America Online") %>
       </li>
       -->
   
@@ -56,10 +56,12 @@
     <div id="any-open-id" style="display:none;">
       <hr />
       <div class="content">
-        <%= label_tag 'openid_url', 'OpenID URL:' %>
-        <%= text_field_tag :openid_url, params[:openid_url] || params['openid.identity'], :html => {:autocomplete => 'off'} %>
-        <br /><br />
-        <%= submit_tag "#{label} with OpenID" %>
+        <% form_tag submit_path do %>
+            <%= label_tag 'openid_url', 'OpenID URL:' %>
+            <%= text_field_tag :openid_url, nil, :html => {:autocomplete => 'off'} %>
+            <br /><br />
+            <%= submit_tag "#{label} with OpenID" %>
+        <% end -%>
       </div>
     </div>
 </fieldset>

@@ -1,40 +1,43 @@
 <% @user.password = @user.password_confirmation = nil %>
 <%= title "Create Account" %>
-<p class="sub-head"><strong>Create an account</strong> using one of the following:</p>
+<div class="user">
 
-<% form_for :user, @user, :url => users_path, :html => {:method => 'post'} do |f| %>
-    <%= f.error_messages %>
-    <%= render :partial => 'shared/openid', :locals => {:label => 'Create'} %>
-    <fieldset>
-        <legend><%= APP_CONFIG[:site_name] %></legend>
-        <ul>
-            <li>
-                <%= f.label 'name', 'Full Name' %>
-                <%= f.text_field 'name' %>
-            </li>
-            <li>
-                <%= f.label 'email', 'Email' %>
-                <%= f.text_field 'email' %>
-            </li>
-            <% if @user.using_open_id? -%>
-              <li>
-                  <%= f.label 'identity_url', 'Identity URL' %>
-                  <%= f.text_field 'identity_url' %>
-              </li>
-            <% else -%>
-              <li>
-                  <%= f.label 'password', 'Password' %>
-                  <%= f.password_field 'password' %>
-              </li>
-              <li>
-                  <%= f.label 'password_confirmation', 'Confirm Password' %>
-                  <%= f.password_field 'password_confirmation' %>
-              </li>
-            <% end -%>
+    <p class="sub-head"><strong>Create an account</strong> using one of the following:</p>
 
-            <li class="buttons">
-                <%= submit_tag 'Create' %>
-            </li>
-        </ul>
-    </fieldset>
-<% end %>
+    <%= render :partial => 'shared/openid', :locals => { :submit_path => users_path, :label => 'Create' } %>
+    <% form_for :user, @user, :url => users_path, :html => {:method => 'post'} do |f| %>
+        <%= f.error_messages %>
+        <fieldset>
+            <legend><%= APP_CONFIG[:site_name] %></legend>
+            <ul>
+                <li>
+                    <%= f.label 'name', 'Full Name' %>
+                    <%= f.text_field 'name' %>
+                </li>
+                <li>
+                    <%= f.label 'email', 'Email' %>
+                    <%= f.text_field 'email' %>
+                </li>
+                <% if @user.using_open_id? -%>
+                  <li>
+                      <%= f.label 'identity_url', 'Identity URL' %>
+                      <%= f.text_field 'identity_url' %>
+                  </li>
+                <% else -%>
+                  <li>
+                      <%= f.label 'password', 'Password' %>
+                      <%= f.password_field 'password' %>
+                  </li>
+                  <li>
+                      <%= f.label 'password_confirmation', 'Confirm Password' %>
+                      <%= f.password_field 'password_confirmation' %>
+                  </li>
+                <% end -%>
+
+                <li class="buttons">
+                    <%= submit_tag 'Create' %>
+                </li>
+            </ul>
+        </fieldset>
+    <% end %>
+</div>

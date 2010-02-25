@@ -4,7 +4,9 @@ class AccountCreationTest < ActionController::IntegrationTest
 
   context "An unknown user" do
     setup do
+      @openid_url = 'http://openid.example.com'
       ActionMailer::Base.deliveries = []
+      stub_open_id_creation @openid_url
     end
 
     should "be redirected to new session path" do
@@ -33,6 +35,13 @@ class AccountCreationTest < ActionController::IntegrationTest
       assert  flash[:notice] =~ /verified/i
       user.reload
       assert_nil user.email_verification_code
+    end
+
+    should "be able to create an account with open id" do
+      post users_path, :openid_url => 'http://openid.example.com'
+      assert_redirected_to 'http://openid.example.com'
+      user = User.last
+      assert user.using_open_id?
     end
   end
 

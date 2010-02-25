@@ -53,8 +53,9 @@ body {
     display: inline;
 }
 
-form {
+.user fieldset {
     margin-top: 1em;
+    padding: .5em;
     width: 30em;
 }
 
@@ -129,6 +130,7 @@ div#flash-error {
 
 /* === ERROR MESSAGES === */
 div#errorExplanation {
+    width: 30em;
     border: 5px #ff0000 solid;
     padding: .5em;
     margin-bottom: .6em;

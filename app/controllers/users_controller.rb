@@ -5,6 +5,8 @@ class UsersController < ApplicationController
   before_filter :find_user, :only => [:edit, :update, :suspend, :unsuspend, :destroy, :purge, :send_verification]
   before_filter :authorized?, :only => [:edit, :update, :send_verification]
 
+  rescue_from SocketError, :with => :on_socket_error
+
   def new
     @user = User.new
   end
@@ -91,9 +93,19 @@ class UsersController < ApplicationController
       self.current_user = @user
       redirect_back_or_default
     else
-      flash[:error] = 'There was a problem creating your account.'
+      # flash[:error] = 'There was a problem creating your account.'
       render :new
     end
+  end
+
+  def socket_error?
+    @socket_error || false
+  end
+
+  def on_socket_error(error)
+    @socket_error = true
+    flash[:error] = "There was a problem sending your email, please try again."
+    redirect_back_or_default
   end
 
   def activate_site_user(user)
@@ -109,7 +121,6 @@ class UsersController < ApplicationController
   def create_open_id_user(openid_url)
     if(open_id_user_exists?(openid_url))
       flash[:error] = "We already have an account for that user, please try signing in."
-      # TODO: Just go ahead and log them in?
       redirect_to new_session_path
       return false
     end
@@ -125,6 +136,7 @@ class UsersController < ApplicationController
   end
 
   def open_id_user_exists?(identity_url)
+    return false if identity_url.nil?
     !User.find_by_identity_url(identity_url).nil?
   end
 

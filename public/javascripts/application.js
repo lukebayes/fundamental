@@ -1,12 +1,4 @@
 
-function authenticateWithOpenId(url) {
-    $('#openid_url').val(url);
-};
-
-function clearOpenId() {
-    $('#openid_url').val('');
-}
-
 function toggleOpenIdEntry() {
     var target = $('#any-open-id');
     var vis = target.is(':visible');
