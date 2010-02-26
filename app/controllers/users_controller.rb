@@ -93,7 +93,6 @@ class UsersController < ApplicationController
       self.current_user = @user
       redirect_back_or_default
     else
-      # flash[:error] = 'There was a problem creating your account.'
       render :new
     end
   end

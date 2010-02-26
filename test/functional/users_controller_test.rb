@@ -32,12 +32,15 @@ class UsersControllerTest < ActionController::TestCase
       end
     end
 
-    context "with an invalid SiteUser should fail creation because of" do
+    context "with an invalid SiteUser" do
       [:email, :password, :password_confirmation].each do |field|
-        context "nil #{field}" do
+        context "and missing #{field}" do
           setup { post :create, :user => site_user_hash(field => nil) }
+
           should_render_template :new
-          should_set_the_flash_to(/problem/i)
+          should "fail validations" do
+            assert_validation_failure(assigns(:user), field)
+          end
         end
       end
     end

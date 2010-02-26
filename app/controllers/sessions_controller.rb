@@ -45,9 +45,19 @@ class SessionsController < ApplicationController
           redirect_back_or_default
         end
       else
-        flash[:error] = result.message || "Open ID authentication failed."
+        flash[:error] = update_openid_error_message(result.message, identity_url)
         redirect_to new_session_path
       end
     end
+  end
+  
+  def update_openid_error_message(message, url)
+    message ||= "Open ID authentication failed."
+    message.gsub("Sorry, the OpenID server couldn't be found", openid_connection_error_message(url))
+  end
+  
+  def openid_connection_error_message(url)
+    uri = URI.parse(url)
+    "Sorry, #{uri.host} is not responding to our request to verify your identity."
   end
 end

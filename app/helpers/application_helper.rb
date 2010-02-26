@@ -12,10 +12,15 @@ module ApplicationHelper
   # Outputs the corresponding flash message if any are set
   def flash_messages
     messages = []
-    %w(error notice warning).each do |msg|
-      messages << content_tag(:div, h(flash[msg.to_sym]), :id => "flash-#{msg}", :class => 'flash') unless flash[msg.to_sym].blank?
+    %w(error notice warning).each do |type|
+      message = flash[type.to_sym]
+      messages << render_flash_message(type, message) unless message.blank?
     end
     messages
+  end
+  
+  def render_flash_message(type, message)
+    "<div id='flash-#{type}' class='flash'><div>#{h(message)}</div></div>"
   end
 
   def openid_link_for(submit_path, provider_url, name, label)

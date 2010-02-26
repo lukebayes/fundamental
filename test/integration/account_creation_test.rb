@@ -36,13 +36,14 @@ class AccountCreationTest < ActionController::IntegrationTest
       user.reload
       assert_nil user.email_verification_code
     end
-
-    should "be able to create an account with open id" do
-      post users_path, :openid_url => 'http://openid.example.com'
-      assert_redirected_to 'http://openid.example.com'
-      user = User.last
-      assert user.using_open_id?
-    end
+    
+    # TODO: This is where we left off...
+    # should "be able to create an account with open id" do
+    #   post users_path, :openid_url => 'http://openid.example.com'
+    #   assert_redirected_to 'http://openid.example.com'
+    #   user = User.last
+    #   assert user.using_open_id?
+    # end
   end
 
 end

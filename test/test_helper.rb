@@ -42,6 +42,14 @@ class ActiveSupport::TestCase
   end
   
   protected
+  
+  def assert_validation_failure(model, field)
+    assert_not_nil model.errors, "The provided model did not have any errors"
+    model.errors.each do |name, message|
+      return if(name == field.to_s)
+    end
+    fail "Expected to find validation failure for field: #{field} on model: #{model}"
+  end
 
   def create_open_id_user(options = {})
     User.new(open_id_user_hash(options))

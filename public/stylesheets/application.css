@@ -55,7 +55,7 @@ body {
 
 .user fieldset {
     margin-top: 1em;
-    padding: .5em;
+/*    padding: .5em;*/
     width: 30em;
 }
 
@@ -132,8 +132,11 @@ div#flash-error {
 div#errorExplanation {
     width: 30em;
     border: 5px #ff0000 solid;
-    padding: .5em;
-    margin-bottom: .6em;
+/*    margin-bottom: .6em;*/
+}
+
+div#errorExplanation > div {
+    padding: 0.5em;
 }
 
 div#errorExplanation h2 {
