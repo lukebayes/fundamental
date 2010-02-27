@@ -137,6 +137,10 @@ class UsersController < ApplicationController
 
   def finish_creating_open_id_user(attributes)
     @user = User.create(attributes)
+    if(!@user.valid?)
+      render :action => 'new'
+      return
+    end
     self.current_user = @user
     flash[:notice] = "Please finish this last step to complete creating your account."
     render :action => 'edit'
