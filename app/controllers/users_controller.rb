@@ -135,8 +135,8 @@ class UsersController < ApplicationController
   end
 
   def open_id_user_exists?(identity_url)
-    return false if identity_url.nil?
-    !User.find_by_identity_url(identity_url).nil?
+    return false if identity_url.blank?
+    !User.find_by_identity_url(identity_url).blank?
   end
 
   def finish_creating_open_id_user(attributes)
