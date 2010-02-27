@@ -24,7 +24,6 @@ class UsersController < ApplicationController
     if(!using_open_id?)
       create_site_user
     else
-      puts "OPEN URL: #{params[:openid_url]}"
       create_open_id_user(params[:openid_url])
     end
   end
@@ -119,14 +118,15 @@ class UsersController < ApplicationController
   # openid_url is the general target for openid services
   # identity_url is the user-specific auth url
   def create_open_id_user(openid_url)
-    if(OpenIdUser.exists_for_identity_url?(openid_url))
-      flash[:error] = "We already have an account for that user, please try signing in."
-      redirect_to new_session_path
-      return false
-    end
-
     authenticate_with_open_id(openid_url, :return_to => open_id_create_url, :required => open_id_required_fields) do |result, identity_url, registration|
       if result.successful?
+
+        if(OpenIdUser.exists_for_identity_url?(identity_url))
+          flash[:error] = "We already have an account for that user, please try signing in."
+          redirect_to new_session_path
+          return false
+        end
+
         finish_creating_open_id_user get_options_from_open_id_params(params, identity_url) 
       else
         @user = User.new
