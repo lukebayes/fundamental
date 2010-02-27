@@ -1,53 +1,55 @@
 <% @user.password = @user.password_confirmation = nil %>
 <%= title "Update Account" %>
-<p class="sub-head"><strong>Update</strong> your account:</p>
+<div class="user">
+  <p class="sub-head"><strong>Update</strong> your account:</p>
 
-<% form_for :user, @user, :url => user_path(@user), :html => {:method => 'put', :id => 'user-form'} do |f| %>
-    <%= f.error_messages %>
-    <fieldset>
-        <legend><%= APP_CONFIG[:site_name] %></legend>
-        <ul>
-            <li>
-                <%= f.label 'name', 'Full Name' %>
-                <%= f.text_field 'name' %>
-            </li>
-            <% if !@user.verified? -%>
-            <li class="unverified">
-                <span class="verification">(unverified)</span>
-            <% else -%>
-            <li class="verified">
-                <span class="verification">(verified)</span>
-            <% end -%>
-                <%= f.label 'email', 'Email' %>
-                <%= f.text_field 'email', :html => {:class => 'verified'} %>
-            </li>
+  <% form_for :user, @user, :url => user_path(@user), :html => {:method => 'put', :id => 'user-form'} do |f| %>
+      <%= f.error_messages %>
+      <fieldset>
+          <legend><%= APP_CONFIG[:site_name] %></legend>
+          <ul>
+              <li>
+                  <%= f.label 'name', 'Full Name' %>
+                  <%= f.text_field 'name' %>
+              </li>
+              <% if !@user.verified? -%>
+              <li class="unverified">
+                  <span class="verification">(unverified)</span>
+              <% else -%>
+              <li class="verified">
+                  <span class="verification">(verified)</span>
+              <% end -%>
+                  <%= f.label 'email', 'Email' %>
+                  <%= f.text_field 'email', :html => {:class => 'verified'} %>
+              </li>
             
-            <% if @user.using_open_id? -%>
-                <li>
-                    <%= f.label 'identity_url', 'Identity URL' %>
-                    <%= f.text_field 'identity_url' %>
-                </li>
-            <% else -%>
-                <li>
-                    <%= f.label 'password', 'Password' %>
-                    <%= f.password_field 'password' %>
-                </li>
-                <li>
-                    <%= f.label 'password_confirmation', 'Confirm Password' %>
-                    <%= f.password_field 'password_confirmation' %>
-                </li>
-            <% end -%>
+              <% if @user.using_open_id? -%>
+                  <li>
+                      <%= f.label 'identity_url', 'Identity URL' %>
+                      <%= f.text_field 'identity_url' %>
+                  </li>
+              <% else -%>
+                  <li>
+                      <%= f.label 'password', 'Password' %>
+                      <%= f.password_field 'password' %>
+                  </li>
+                  <li>
+                      <%= f.label 'password_confirmation', 'Confirm Password' %>
+                      <%= f.password_field 'password_confirmation' %>
+                  </li>
+              <% end -%>
 
-            <li class="buttons">
-                <%= submit_tag 'Update' %>
-            </li>
-        </ul>
-    </fieldset>
-<% end %>
+              <li class="buttons">
+                  <%= submit_tag 'Update' %>
+              </li>
+          </ul>
+      </fieldset>
+  <% end %>
+</div>
 
 <% if !@user.verified? -%>
     <li>
-        <div class="send-verification"><%= button_to 'Send verification email', send_verification_user_path(@user) %></div>
+        <div class="send-verification"><%= button_to 'Send verification email', send_verification_user_path(@user.id) %></div>
     </li>
 <% end -%>
 

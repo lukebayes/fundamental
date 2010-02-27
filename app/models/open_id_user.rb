@@ -39,6 +39,11 @@ class OpenIdUser < User
   def self.authenticate(identity_url)
     OpenIdUser.find_by_identity_url(identity_url)
   end
+  
+  def self.exists_for_identity_url?(identity_url)
+    return false if identity_url.blank?
+    !OpenIdUser.find_by_identity_url(identity_url).nil?
+  end
 
   def using_open_id?
     true

@@ -105,7 +105,6 @@ class UsersControllerTest < ActionController::TestCase
     end
 
     context "with authenticated user" do
-
       setup do
         login_as :quentin
       end

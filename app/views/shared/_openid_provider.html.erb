@@ -1,4 +1,4 @@
 <% form_tag submit_path do %>
-    <input type="hidden" id="openid_url" name="openid_url" value="<%= provider_url.to_s %>" />
+    <input type="hidden" id="openid_url" name="openid_url" value="<%= provider_url %>" />
     <input name="commit" type="image" src="/images/openid/<%= name.downcase %>.png" alt="<%= label %>" />
 <% end -%>

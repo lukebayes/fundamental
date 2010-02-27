@@ -128,5 +128,29 @@ class UserTest < ActiveSupport::TestCase
 
     end
   end
+  
+  context "Checking the existence of an openid user" do
+    
+    context "with a nil identity_url" do
+      should "return false" do
+        assert_equal false, OpenIdUser.exists_for_identity_url?(nil)
+      end
+    end
+
+    context "with an unknown identity_url" do
+      should "return false" do
+        assert_equal false, OpenIdUser.exists_for_identity_url?("abc")
+      end
+    end
+  end
+  
+  context "an openid user" do
+    setup { @user = users(:sean) }
+    
+    should "be findable by identity_url" do
+      assert OpenIdUser.exists_for_identity_url?(@user.identity_url)
+    end
+    
+  end
 
 end
